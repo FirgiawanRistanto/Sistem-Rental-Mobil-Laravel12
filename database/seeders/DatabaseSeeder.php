@@ -13,11 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // \App\Models\User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Seed the users table
+        // This will clear the users table and insert new sample data
+        $this->call(UserSeeder::class);
+        // Clear existing sales data
+        $this->call(ClearSalesSeeder::class);
+        // Seed the sales table
+        $this->call(SalesSeeder::class);
+        
     }
 }
