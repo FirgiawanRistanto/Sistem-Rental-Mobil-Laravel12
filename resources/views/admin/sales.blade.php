@@ -3,51 +3,97 @@
 @section('title', 'Sales Data')
 
 @section('content')
-<div class="container mx-auto p-4 sm:p-6 lg:p-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Sales Management</h1>
-        <a href="#" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1">
-            + Add Sale
-        </a>
-    </div>
 
-    <div class="bg-white shadow-lg rounded-xl overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white">
-                <thead class="bg-gray-800 text-white">
-                    <tr>
-                        <th class="py-3 px-6 text-left text-sm font-semibold uppercase">Product Name</th>
-                        <th class="py-3 px-6 text-left text-sm font-semibold uppercase">Price</th>
-                        <th class="py-3 px-6 text-center text-sm font-semibold uppercase">Quantity</th>
-                        <th class="py-3 px-6 text-left text-sm font-semibold uppercase">Total Price</th>
-                        <th class="py-3 px-6 text-left text-sm font-semibold uppercase">Date</th>
-                        <th class="py-3 px-6 text-center text-sm font-semibold uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700">
-                    @forelse ($sales as $sale)
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition duration-150">
-                            <td class="py-4 px-6 truncate" title="{{ $sale->product_name }}">{{ $sale->product_name }}</td>
-                            <td class="py-4 px-6 whitespace-nowrap">Rp {{ number_format($sale->price, 0, ',', '.') }}</td>
-                            <td class="py-4 px-6 text-center whitespace-nowrap">{{ $sale->quantity }}</td>
-                            <td class="py-4 px-6 whitespace-nowrap">Rp {{ number_format($sale->price * $sale->quantity, 0, ',', '.') }}</td>
-                            <td class="py-4 px-6 whitespace-nowrap">{{ $sale->created_at->format('d M Y') }}</td>
-                            <td class="py-4 px-6 text-center whitespace-nowrap">
-                                <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium mr-3 transition duration-150">Edit</a>
-                                <a href="#" class="text-red-600 hover:text-red-800 font-medium transition duration-150">Delete</a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-6 text-gray-500">
-                                No sales data found.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+<!-- Header Section -->
+<div class="row">
+    <div class="col-sm-6">
+        <h3 class="mb-0 font-weight-bold">Sales Data</h3>
+        <p class="text-muted">Sales data for the business.</p>
+    </div>
+    <div class="col-sm-6">
+        <div class="d-flex align-items-center justify-content-md-end">
+            <div class="mb-3 mb-xl-0 pr-1">
+                <div class="dropdown">
+                    <button class="btn bg-white btn-sm dropdown-toggle btn-icon-text border mr-2" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="typcn typcn-calendar-outline mr-2"></i>Last 7 days
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                        <h6 class="dropdown-header">Last 14 days</h6>
+                        <a class="dropdown-item" href="#">Last 21 days</a>
+                        <a class="dropdown-item" href="#">Last 28 days</a>
+                    </div>
+                </div>
+            </div>
+            <div class="pr-1 mb-3 mr-2 mb-xl-0">
+                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
+                    <i class="typcn typcn-arrow-forward-outline mr-2"></i>Export
+                </button>
+            </div>
+            <div class="pr-1 mb-3 mb-xl-0">
+                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
+                    <i class="typcn typcn-info-large-outline mr-2"></i>Info
+                </button>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Sales Table Row -->
+<div class="row mt-4">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="card-title">Sales Management</h4>
+                    <a href="#" class="btn btn-success btn-sm text-white">
+                        + Add Sale
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th class="text-center">Quantity</th>
+                                <th>Total Price</th>
+                                <th>Date</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($sales as $sale)
+                                <tr>
+                                    <td title="{{ $sale->product_name }}">{{ $sale->product_name }}</td>
+                                    <td>Rp {{ number_format($sale->price, 0, ',', '.') }}</td>
+                                    <td class="text-center">{{ $sale->quantity }}</td>
+                                    <td>Rp {{ number_format($sale->price * $sale->quantity, 0, ',', '.') }}</td>
+                                    <td>{{ $sale->created_at->format('d M Y') }}</td>
+                                    <td class="text-center">
+                                        <a href="#" class="text-primary mr-3">Edit</a>
+                                        <a href="#" class="text-danger">Delete</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        No sales data found.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@include('layouts._partials.footer')
+
+</div>
 @endsection
 
+@push('scripts')
+<script src="{{ url('assets/js/dashboard.js') }}"></script>
+@endpush

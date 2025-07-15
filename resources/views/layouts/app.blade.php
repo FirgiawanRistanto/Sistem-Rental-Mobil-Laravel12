@@ -36,8 +36,34 @@
             @include('layouts._partials.sidebar')
             
             <!-- Main Content -->
-            @yield('content')
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @yield('content')
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:partials/_footer.html -->
+                <!-- partial -->
+            </div>
         </div>
+        <!-- page-body-wrapper ends -->
+
     </div>
 
     <!-- Base Scripts -->
@@ -62,3 +88,14 @@
 </body>
 
 </html>
+
+<style>
+    .main-panel {
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: 100vh;
+    }
+    .content-wrapper {
+        flex-grow: 1 !important;
+    }
+</style>

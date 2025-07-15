@@ -3,74 +3,98 @@
 @section('title', 'Users')
 
 @section('content')
-<div class="container mx-auto p-4 sm:p-6 lg:p-8">
-    <!-- Header Section -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">User Management</h1>
-            <p class="text-gray-600 mt-1">Manage system users and their permissions</p>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <button onclick="openAddUserModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-                Add User
-            </button>
-            <button onclick="exportUsers()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                Export
-            </button>
-        </div>
-    </div>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Total Users</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $users->count() }}</p>
-                </div>
-                <div class="p-3 bg-blue-100 rounded-full">
-                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                    </svg>
-                </div>
-            </div>
-        </div>
-        
-        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Active Users</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $users->where('is_active', true)->count() ?? $users->count() }}</p>
-                </div>
-                <div class="p-3 bg-green-100 rounded-full">
-                    <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+<!-- Header Section -->
+<div class="row">
+    <div class="col-sm-6">
+        <h3 class="mb-0 font-weight-bold">User Management</h3>
+        <p class="text-muted">Manage users of the application.</p>
+    </div>
+    <div class="col-sm-6">
+        <div class="d-flex align-items-center justify-content-md-end">
+            <div class="mb-3 mb-xl-0 pr-1">
+                <div class="dropdown">
+                    <button class="btn bg-white btn-sm dropdown-toggle btn-icon-text border mr-2" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="typcn typcn-calendar-outline mr-2"></i>Last 7 days
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                        <h6 class="dropdown-header">Last 14 days</h6>
+                        <a class="dropdown-item" href="#">Last 21 days</a>
+                        <a class="dropdown-item" href="#">Last 28 days</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-purple-500">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">New This Month</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $users->where('created_at', '>=', now()->startOfMonth())->count() }}</p>
-                </div>
-                <div class="p-3 bg-purple-100 rounded-full">
-                    <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                    </svg>
-                </div>
+            <div class="pr-1 mb-3 mr-2 mb-xl-0">
+                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
+                    <i class="typcn typcn-arrow-forward-outline mr-2"></i>Export
+                </button>
+            </div>
+            <div class="pr-1 mb-3 mb-xl-0">
+                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
+                    <i class="typcn typcn-info-large-outline mr-2"></i>Info
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Filter and Search Section -->
-    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-        <div class="flex flex-col sm:flex-row gap-
+<!-- Users Table Row -->
+<div class="row mt-4">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="card-title">User Management</h4>
+                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm text-white">
+                        + Add User
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Joined On</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($users as $user)
+                            <tr>
+                                <td>{{ $user->name }}</td>
+                                <td title="{{ $user->email }}">{{ $user->email }}</td>
+                                <td>{{ $user->created_at->format('d M Y') }}</td>
+                                <td class="text-center">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="text-primary mr-3">Edit</a>
+                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-danger btn-link" onclick="return confirm('Are you sure?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-4">
+                                    No users found.
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@include('layouts._partials.footer')
+
+</div>
+@endsection
+
+@push('scripts')
+<script src="{{ url('assets/js/dashboard.js') }}"></script>
+@endpush
