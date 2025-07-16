@@ -248,9 +248,9 @@
         </div>
        
     </div>
-</div> @include('layouts._partials.footer')
+</div> 
 <!-- content-wrapper ends -->
-</div>
+</div>@include('layouts._partials.footer')
 @endsection
 
 @push('scripts')

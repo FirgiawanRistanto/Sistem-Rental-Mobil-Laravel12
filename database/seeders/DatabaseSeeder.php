@@ -18,10 +18,8 @@ class DatabaseSeeder extends Seeder
         // Seed the users table
         // This will clear the users table and insert new sample data
         $this->call(UserSeeder::class);
-        // Clear existing sales data
-        $this->call(ClearSalesSeeder::class);
-        // Seed the sales table
-        $this->call(SalesSeeder::class);
+        
+        $this->call(PenjualanSeeder::class);
         
     }
 }

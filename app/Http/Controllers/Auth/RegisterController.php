@@ -52,6 +52,9 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'jenis_kelamin' => ['required', 'string', 'in:Laki-laki,Perempuan'],
+            'alamat' => ['required', 'string'],
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ]);
     }
 
@@ -63,10 +66,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $imageName = null;
+        if (isset($data['foto'])) {
+            $imageName = time().'.'.$data['foto']->extension();
+            $data['foto']->move(public_path('images'), $imageName);
+        }
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'jenis_kelamin' => $data['jenis_kelamin'],
+            'alamat' => $data['alamat'],
+            'foto' => $imageName,
         ]);
     }
 }

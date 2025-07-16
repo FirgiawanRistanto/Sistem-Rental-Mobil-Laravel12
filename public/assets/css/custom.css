@@ -8,3 +8,17 @@
 .content-wrapper {
   flex-grow: 1;
 }
+
+/* Style for truncating text with ellipsis */
+.truncate-text {
+  max-width: 250px; /* You can adjust this width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block; /* Important for the styles to apply correctly */
+}
+
+/* Prevent action buttons from wrapping in tables */
+.actions-cell {
+  white-space: nowrap;
+}

@@ -30,9 +30,8 @@
                 </button>
             </div>
             <div class="pr-1 mb-3 mb-xl-0">
-                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
-                    <i class="typcn typcn-info-large-outline mr-2"></i>Info
-                </button>
+                <a href="{{ route('admin.users.create') }}" class="btn btn-info btn-sm text-white btn-icon-text border">+ Add User
+                </a>
             </div>
         </div>
     </div>
@@ -43,41 +42,46 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title">User Management</h4>
-                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm text-white">
-                        + Add User
-                    </a>
-                </div>
-
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Alamat</th>
+                                <th>Foto</th>
                                 <th>Joined On</th>
-                                <th class="text-center">Actions</th>
+                                <th class="text-center actions-cell">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($users as $user)
                             <tr>
-                                <td>{{ $user->name }}</td>
-                                <td title="{{ $user->email }}">{{ $user->email }}</td>
+                                <td><span class="truncate-text" title="{{ $user->name }}">{{ $user->name }}</span></td>
+                                <td title="{{ $user->email }}"><span class="truncate-text" title="{{ $user->email }}">{{ $user->email }}</span></td>
+                                <td>{{ $user->jenis_kelamin }}</td>
+                                <td><span class="truncate-text" title="{{ $user->alamat }}">{{ $user->alamat }}</span></td>
+                                <td>
+                                    @if($user->foto)
+                                    <img src="{{ asset('images/' . $user->foto) }}" alt="Foto" width="50">
+                                    @else
+                                    No Photo
+                                    @endif
+                                </td>
                                 <td>{{ $user->created_at->format('d M Y') }}</td>
-                                <td class="text-center">
-                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="text-primary mr-3">Edit</a>
+                                <td class="text-center actions-cell">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-success btn-sm mr-2"><i class="typcn typcn-edit btn-icon-append"></i>Edit</a>
                                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-danger btn-link" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')"><i class="typcn typcn-delete btn-icon-append"></i>Delete</button>
                                     </form>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center py-4">
+                                <td colspan="7" class="text-center py-4">
                                     No users found.
                                 </td>
                             </tr>
@@ -90,9 +94,9 @@
     </div>
 </div>
 
-@include('layouts._partials.footer')
 
-</div>
+</div>@include('layouts._partials.footer')
+
 @endsection
 
 @push('scripts')

@@ -39,10 +39,10 @@
               <span class="menu-title">User</span>
             </a>
           </li>
-          <li class="nav-item {{ request()->is('admin/sales') || request()->is('admin/sales/*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.sales') }}">
+          <li class="nav-item {{ request()->is('admin/penjualan') || request()->is('admin/penjualan/*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.penjualan') }}">
               <i class="typcn typcn-chart-area menu-icon"></i>
-              <span class="menu-title">Sale</span>
+              <span class="menu-title">Penjualan</span>
             </a>
           </li>
           <li class="nav-item">
