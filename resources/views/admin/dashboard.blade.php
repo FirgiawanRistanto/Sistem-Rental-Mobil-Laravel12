@@ -248,6 +248,14 @@
         </div>
        
     </div>
+    <div class="col-lg-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">User Logins (User Role)</h4>
+                <canvas id="userLoginsChart"></canvas>
+            </div>
+        </div>
+    </div>
 </div> 
 <!-- content-wrapper ends -->
 </div>@include('layouts._partials.footer')
@@ -255,4 +263,35 @@
 
 @push('scripts')
 <script src="{{ url('assets/js/dashboard.js') }}"></script>
+<script>
+    var userLoginsLabels = @json($labels);
+    var userLoginsData = @json($data);
+
+    var ctx = document.getElementById('userLoginsChart').getContext('2d');
+    var userLoginsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: userLoginsLabels,
+            datasets: [{
+                label: 'Number of User Logins',
+                data: userLoginsData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>
 @endpush

@@ -3,12 +3,12 @@
           <li class="nav-item">
             <div class="d-flex sidebar-profile">
               <div class="sidebar-profile-image">
-                <img src="{{ url('assets/images/faces/face29.png') }}" alt="image">
+                <img src="{{ Auth::user()->foto ? asset('images/' . Auth::user()->foto) : url('assets/images/faces/face29.png') }}" alt="image">
                 <span class="sidebar-status-indicator"></span>
               </div>
               <div class="sidebar-profile-name">
                 <p class="sidebar-name">
-                  Kenneth Osborne
+                  {{ Auth::user()->name }}
                 </p>
                 <p class="sidebar-designation">
                   Welcome
@@ -27,22 +27,40 @@
             </div>
             <p class="sidebar-menu-title">Dash menu</p>
           </li>
-          <li class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">
               <i class="typcn typcn-device-desktop menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->routeIs('admin.users.index', 'admin.users.create', 'admin.users.edit', 'admin.users.show') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.users') }}">
               <i class="typcn typcn-group menu-icon"></i>
               <span class="menu-title">User</span>
             </a>
           </li>
-          <li class="nav-item {{ request()->is('admin/penjualan') || request()->is('admin/penjualan/*') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->routeIs('admin.penjualan.index', 'admin.penjualan.create', 'admin.penjualan.edit', 'admin.penjualan.show') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.penjualan') }}">
               <i class="typcn typcn-chart-area menu-icon"></i>
               <span class="menu-title">Penjualan</span>
+            </a>
+          </li>
+          <li class="nav-item {{ request()->routeIs('admin.products.index', 'admin.products.create', 'admin.products.edit', 'admin.products.show') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.products.index') }}">
+              <i class="typcn typcn-shopping-bag menu-icon"></i>
+              <span class="menu-title">Produk</span>
+            </a>
+          </li>
+          <li class="nav-item {{ request()->routeIs('admin.categories.index', 'admin.categories.create', 'admin.categories.edit', 'admin.categories.show') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.categories.index') }}">
+              <i class="typcn typcn-th-list menu-icon"></i>
+              <span class="menu-title">Kategori</span>
+            </a>
+          </li>
+          <li class="nav-item {{ request()->routeIs('admin.orders.index', 'admin.orders.show') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.orders.index') }}">
+              <i class="typcn typcn-clipboard menu-icon"></i>
+              <span class="menu-title">Pesanan</span>
             </a>
           </li>
           <li class="nav-item">
@@ -65,13 +83,5 @@
               <span class="menu-title">Documentation</span>
             </a>
           </li>
-        </ul>
-        <ul class="sidebar-legend">
-          <li>
-            <p class="sidebar-menu-title">Category</p>
-          </li>
-          <li class="nav-item"><a href="#" class="nav-link">#Sales</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">#Marketing</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">#Growth</a></li>
         </ul>
       </nav>

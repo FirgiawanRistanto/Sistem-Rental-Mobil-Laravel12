@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PenjualanSeeder extends Seeder
 {
@@ -13,19 +14,37 @@ class PenjualanSeeder extends Seeder
      */
     public function run(): void
     {
-        $sales = DB::table('sales')->get();
-
-        foreach ($sales as $sale) {
-            DB::table('penjualan')->insert([
-                'nama_produk' => $sale->product_name,
-                'jumlah' => $sale->quantity,
-                'harga' => $sale->price,
-                'total' => $sale->total,
-                'tanggal_penjualan' => $sale->sale_date,
-                'nama_pelanggan' => $sale->customer_name,
-                'created_at' => $sale->created_at,
-                'updated_at' => $sale->updated_at,
-            ]);
-        }
+        DB::table('penjualan')->insert([
+            [
+                'nama_produk' => 'Laptop Gaming',
+                'jumlah' => 1,
+                'harga' => 15000000.00,
+                'total' => 15000000.00,
+                'tanggal_penjualan' => Carbon::now()->subDays(5),
+                'nama_pelanggan' => 'Budi Santoso',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'nama_produk' => 'Smartphone Terbaru',
+                'jumlah' => 2,
+                'harga' => 7500000.00,
+                'total' => 15000000.00,
+                'tanggal_penjualan' => Carbon::now()->subDays(3),
+                'nama_pelanggan' => 'Siti Aminah',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'nama_produk' => 'Headphone Bluetooth',
+                'jumlah' => 1,
+                'harga' => 1200000.00,
+                'total' => 1200000.00,
+                'tanggal_penjualan' => Carbon::now()->subDays(1),
+                'nama_pelanggan' => 'Joko Susilo',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+        ]);
     }
 }

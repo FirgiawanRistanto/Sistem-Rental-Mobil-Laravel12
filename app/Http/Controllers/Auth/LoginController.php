@@ -87,6 +87,19 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * Get the post login redirect path.
+     *
+     * @return string
+     */
+    public function redirectTo()
+    {
+        if (Auth::user()->role === 'admin') {
+            return '/admin/dashboard';
+        }
+        return '/home';
+    }
+
+    /**
      * Create a new controller instance.
      *
      * @return void

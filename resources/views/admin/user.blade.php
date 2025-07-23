@@ -52,6 +52,7 @@
                                 <th>Alamat</th>
                                 <th>Foto</th>
                                 <th>Joined On</th>
+                                <th>Dibuat Oleh</th>
                                 <th class="text-center actions-cell">Actions</th>
                             </tr>
                         </thead>
@@ -70,6 +71,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $user->created_at->format('d M Y') }}</td>
+                                <td>{{ $user->creator->name ?? 'N/A' }}</td>
                                 <td class="text-center actions-cell">
                                     <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-success btn-sm mr-2"><i class="typcn typcn-edit btn-icon-append"></i>Edit</a>
                                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     //
     public function index()
     {
-        // Logic to retrieve and return user data
-        $users = \App\Models\User::all();
+        $users = \App\Models\User::with('creator')->get();
         return view('admin.user', ['users' => $users]);
     }
 
@@ -40,6 +40,7 @@ class UserController extends Controller
         }
 
         $input['password'] = bcrypt($input['password']);
+        $input['created_by'] = Auth::id();
 
         \App\Models\User::create($input);
 
@@ -61,7 +62,22 @@ class UserController extends Controller
             'alamat' => 'required',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'password' => 'nullable|min:8|confirmed',
-        ]);
+        ],
+        [
+            'name.required' => 'Nama wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'foto.image' => 'File harus berupa gambar.',
+            'foto.mimes' => 'Gambar harus berformat jpeg, png, jpg, gif, atau svg.',
+            'foto.max' => 'Ukuran gambar maksimal 2MB.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.'
+        ]
+    
+    );
 
         $input = $request->all();
 
@@ -94,3 +110,4 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully');
     }
 }
+

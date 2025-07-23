@@ -22,3 +22,49 @@
 .actions-cell {
   white-space: nowrap;
 }
+
+/* Product table adjustments */
+.product-table td,
+.product-table th {
+  white-space: nowrap;
+  font-size: 0.85rem; /* Adjust font size as needed */
+}
+
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-card-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.content-container {
+  padding-top: 120px; /* Adjust this value based on your navbar height */
+}
+
+.section-title {
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.pagination .page-item .page-link {
+    color: #667eea;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #667eea;
+    border-color: #667eea;
+    color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+}

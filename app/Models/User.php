@@ -24,7 +24,19 @@ class User extends Authenticatable
         'jenis_kelamin',
         'foto',
         'alamat',
+        'created_by',
+        'role',
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
