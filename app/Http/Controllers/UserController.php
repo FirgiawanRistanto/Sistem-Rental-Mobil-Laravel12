@@ -13,7 +13,6 @@ class UserController extends Controller
         $users = \App\Models\User::with('creator')->get();
         return view('admin.user', ['users' => $users]);
     }
-
     public function create()
     {
         return view('admin.users.create');

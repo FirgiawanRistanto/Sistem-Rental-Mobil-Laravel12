@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\UserLogin;
 use App\Models\User;
+use App\Models\Visitor;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -22,6 +23,14 @@ class AdminController extends Controller
         $labels = $userLogins->pluck('login_date');
         $data = $userLogins->pluck('total_logins');
 
-        return view('admin.dashboard', compact('labels', 'data'));
+        $visitorData = Visitor::select(DB::raw('DATE(visited_at) as visit_date'), DB::raw('count(*) as total_visits'))
+            ->groupBy('visit_date')
+            ->orderBy('visit_date', 'asc')
+            ->get();
+
+        $visitorLabels = $visitorData->pluck('visit_date');
+        $visitorCounts = $visitorData->pluck('total_visits');
+
+        return view('admin.dashboard', compact('labels', 'data', 'visitorLabels', 'visitorCounts'));
     }
 }

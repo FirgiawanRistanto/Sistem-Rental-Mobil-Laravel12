@@ -1,4 +1,4 @@
-    <!-- Navbar -->
+<!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#"><i class="fas fa-shopping-bag me-2"></i>ShopVibe</a>
@@ -9,18 +9,16 @@
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link" href="#home">Home</a>
-                    <a class="nav-link" href="#categories">Categories</a>
-                    <a class="nav-link" href="#deals">Deals</a>
-                    <a class="nav-link" href="#about">About</a>
+                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                    <a class="nav-link" href="{{ route('about') }}">About</a>
                 </div>
                 
-                <div class="search-container mx-3 flex-grow-1">
-                    <input type="text" class="form-control search-input" placeholder="Cari produk impianmu..." id="searchInput" onkeyup="performSearch()">
-                    <button class="search-btn" onclick="performSearch()">
+                <form action="{{ route('search') }}" method="GET" class="search-container mx-3 flex-grow-1" id="searchForm">
+                    <input type="text" class="form-control search-input" placeholder="Cari produk impianmu..." id="searchInput" name="search" value="{{ request('search') }}">
+                    <button type="submit" class="search-btn">
                         <i class="fas fa-search"></i>
                     </button>
-                </div>
+                </form>
                 
                 <div class="navbar-nav">
                     <a class="nav-link position-relative" href="#wishlist">
@@ -60,3 +58,16 @@
             </div>
         </div>
     </nav>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            var searchInput = document.getElementById('searchInput').value.trim();
+            if (searchInput === '') {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+@endpush

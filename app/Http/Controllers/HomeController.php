@@ -76,4 +76,25 @@ class HomeController extends Controller
         $categories = Category::all();
         return view('home', compact('products', 'categories'));
     }
+
+    public function search(Request $request)
+    {
+        $query = Product::query();
+
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $products = $query->paginate(6)->withQueryString();
+        $categories = Category::all();
+        return view('products.search_results', compact('products', 'categories'));
+    }
+
+    public function productsByCategory(Category $category)
+    {
+        $products = $category->products()->paginate(6);
+        $categories = Category::all(); // Untuk sidebar filter
+        return view('products.by_category', compact('products', 'category', 'categories'));
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -19,6 +20,7 @@ class Product extends Model
         'brand',
         'rating',
         'created_by',
+        'slug',
     ];
 
     public function category()
@@ -34,5 +36,18 @@ class Product extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function setSlugAttribute($value)
+    {
+        $slug = Str::slug($this->name);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (static::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+
+        $this->attributes['slug'] = $slug;
     }
 }

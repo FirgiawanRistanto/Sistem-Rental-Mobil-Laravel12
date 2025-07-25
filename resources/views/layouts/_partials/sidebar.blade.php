@@ -27,37 +27,37 @@
             </div>
             <p class="sidebar-menu-title">Dash menu</p>
           </li>
-          <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->is('admin/dashboard*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">
               <i class="typcn typcn-device-desktop menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item {{ request()->routeIs('admin.users.index', 'admin.users.create', 'admin.users.edit', 'admin.users.show') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->is('admin/users*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.users') }}">
               <i class="typcn typcn-group menu-icon"></i>
               <span class="menu-title">User</span>
             </a>
           </li>
-          <li class="nav-item {{ request()->routeIs('admin.penjualan.index', 'admin.penjualan.create', 'admin.penjualan.edit', 'admin.penjualan.show') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->is('admin/penjualan*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.penjualan') }}">
               <i class="typcn typcn-chart-area menu-icon"></i>
               <span class="menu-title">Penjualan</span>
             </a>
           </li>
-          <li class="nav-item {{ request()->routeIs('admin.products.index', 'admin.products.create', 'admin.products.edit', 'admin.products.show') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->is('admin/products*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.products.index') }}">
               <i class="typcn typcn-shopping-bag menu-icon"></i>
               <span class="menu-title">Produk</span>
             </a>
           </li>
-          <li class="nav-item {{ request()->routeIs('admin.categories.index', 'admin.categories.create', 'admin.categories.edit', 'admin.categories.show') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->is('admin/categories*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.categories.index') }}">
               <i class="typcn typcn-th-list menu-icon"></i>
               <span class="menu-title">Kategori</span>
             </a>
           </li>
-          <li class="nav-item {{ request()->routeIs('admin.orders.index', 'admin.orders.show') ? 'active' : '' }}">
+          <li class="nav-item {{ request()->is('admin/orders*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.orders.index') }}">
               <i class="typcn typcn-clipboard menu-icon"></i>
               <span class="menu-title">Pesanan</span>

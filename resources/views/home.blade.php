@@ -59,13 +59,15 @@
         <div class="row justify-content-center">
             @foreach($categories as $category)
             <div class="col-md-3 col-sm-6">
-                <div class="category-card" onclick="filterByCategory('{{ $category->id }}')">
-                    <div class="category-icon">
-                        <i class="fas fa-tshirt"></i> {{-- Placeholder icon, consider dynamic icons later --}}
+                <a href="{{ route('products.byCategory', $category) }}" class="category-card-link">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-tshirt"></i> {{-- Placeholder icon, consider dynamic icons later --}}
+                        </div>
+                        <h5>{{ $category->name }}</h5>
+                        <p>Explore Now</p>
                     </div>
-                    <h5>{{ $category->name }}</h5>
-                    <p>Explore Now</p>
-                </div>
+                </a>
             </div>
             @endforeach
         </div>
@@ -148,7 +150,7 @@
                 <div class="row" id="productsContainer">
                     @foreach($products as $product)
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <a href="{{ route('products.show', $product->id) }}" class="product-card-link">
+                            <a href="{{ route('products.show', $product->slug) }}" class="product-card-link">
                                 <div class="product-card">
                                     <img src="{{ asset('images/' . $product->image) }}" class="product-image" alt="{{ $product->name }}">
                                     <div class="product-info">
@@ -286,9 +288,7 @@
             applyFilters();
         }
 
-        function performSearch() {
-            applyFilters();
-        }
+        
 
         // Navbar scroll effect
         window.addEventListener('scroll', function() {

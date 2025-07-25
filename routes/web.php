@@ -45,8 +45,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'show'])->name('products.show');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('log.visitor');
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+Route::get('search', [App\Http\Controllers\HomeController::class, 'search'])->name('search');
+Route::get('products/{product:slug}', [App\Http\Controllers\Admin\ProductController::class, 'show'])->name('products.show')->middleware('log.visitor');
+Route::get('products/category/{category}', [App\Http\Controllers\HomeController::class, 'productsByCategory'])->name('products.byCategory');
 
 // Cart Routes
 Route::get('cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');

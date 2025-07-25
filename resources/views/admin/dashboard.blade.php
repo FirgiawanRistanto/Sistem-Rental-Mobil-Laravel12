@@ -248,7 +248,8 @@
         </div>
        
     </div>
-    <div class="col-lg-8 grid-margin stretch-card">
+    <div class="row">
+    <div class="col-lg-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">User Logins (User Role)</h4>
@@ -256,6 +257,15 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Website Visitors (IP Address)</h4>
+                <canvas id="visitorChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 </div> 
 <!-- content-wrapper ends -->
 </div>@include('layouts._partials.footer')
@@ -266,6 +276,9 @@
 <script>
     var userLoginsLabels = @json($labels);
     var userLoginsData = @json($data);
+
+    var visitorLabels = @json($visitorLabels);
+    var visitorCounts = @json($visitorCounts);
 
     var ctx = document.getElementById('userLoginsChart').getContext('2d');
     var userLoginsChart = new Chart(ctx, {
@@ -279,6 +292,32 @@
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
                 fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    var visitorCtx = document.getElementById('visitorChart').getContext('2d');
+    var visitorChart = new Chart(visitorCtx, {
+        type: 'bar',
+        data: {
+            labels: visitorLabels,
+            datasets: [{
+                label: 'Website Visitors',
+                data: visitorCounts,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
             }]
         },
         options: {
