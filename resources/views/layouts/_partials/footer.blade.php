@@ -1,9 +1,12 @@
-<footer class="footer">
-    <div class="d-sm-flex justify-content-center justify-content-sm-between"></div>
-        <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright © <a
-                href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com</a> 2020</span>
-        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Free <a
-                href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard </a>templates from
-            Bootstrapdash.com</span>
-    </div>
-</footer>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; {{ date('Y') }} Rental Mobil Admin. Hak cipta dilindungi.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Dibuat dengan <i class="fas fa-heart text-danger"></i> untuk manajemen rental mobil yang lebih baik</p>
+                </div>
+            </div>
+        </div>
+    </footer>

@@ -391,9 +391,7 @@
                     @endif
                 </form>
                
-                <div class="text-center register-link">
-                    <p>Belum punya akun? <a href="{{ route('register') }}">Daftar sekarang</a></p>
-                </div>
+                
             </div>
         </div>
     </div>

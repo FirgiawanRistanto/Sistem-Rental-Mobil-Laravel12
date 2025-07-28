@@ -1,87 +1,18 @@
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-          <li class="nav-item">
-            <div class="d-flex sidebar-profile">
-              <div class="sidebar-profile-image">
-                <img src="{{ Auth::user()->foto ? asset('images/' . Auth::user()->foto) : url('assets/images/faces/face29.png') }}" alt="image">
-                <span class="sidebar-status-indicator"></span>
-              </div>
-              <div class="sidebar-profile-name">
-                <p class="sidebar-name">
-                  {{ Auth::user()->name }}
-                </p>
-                <p class="sidebar-designation">
-                  Welcome
-                </p>
-              </div>
-            </div>
-            <div class="nav-search">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Type to search..." aria-label="search" aria-describedby="search">
-                <div class="input-group-append">
-                  <span class="input-group-text" id="search">
-                    <i class="typcn typcn-zoom"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <p class="sidebar-menu-title">Dash menu</p>
-          </li>
-          <li class="nav-item {{ request()->is('admin/dashboard*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.dashboard') }}">
-              <i class="typcn typcn-device-desktop menu-icon"></i>
-              <span class="menu-title">Dashboard</span>
-            </a>
-          </li>
-          <li class="nav-item {{ request()->is('admin/users*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.users') }}">
-              <i class="typcn typcn-group menu-icon"></i>
-              <span class="menu-title">User</span>
-            </a>
-          </li>
-          <li class="nav-item {{ request()->is('admin/penjualan*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.penjualan') }}">
-              <i class="typcn typcn-chart-area menu-icon"></i>
-              <span class="menu-title">Penjualan</span>
-            </a>
-          </li>
-          <li class="nav-item {{ request()->is('admin/products*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.products.index') }}">
-              <i class="typcn typcn-shopping-bag menu-icon"></i>
-              <span class="menu-title">Produk</span>
-            </a>
-          </li>
-          <li class="nav-item {{ request()->is('admin/categories*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.categories.index') }}">
-              <i class="typcn typcn-th-list menu-icon"></i>
-              <span class="menu-title">Kategori</span>
-            </a>
-          </li>
-          <li class="nav-item {{ request()->is('admin/orders*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.orders.index') }}">
-              <i class="typcn typcn-clipboard menu-icon"></i>
-              <span class="menu-title">Pesanan</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-              <i class="typcn typcn-briefcase menu-icon"></i>
-              <span class="menu-title">UI Elements</span>
-              <i class="typcn typcn-chevron-right menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
-              <i class="typcn typcn-document-text menu-icon"></i>
-              <span class="menu-title">Documentation</span>
-            </a>
-          </li>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="text-white mb-0">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                Dashboard
+            </h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a></li>
+            <li><a href="{{ route('admin.mobils.index') }}" class="{{ request()->routeIs('admin.mobils.*') ? 'active' : '' }}"><i class="fas fa-car"></i>Manajemen Mobil</a></li>
+            <li><a href="{{ route('admin.penyewaans.index') }}" class="{{ request()->routeIs('admin.penyewaans.*') ? 'active' : '' }}"><i class="fas fa-calendar-alt"></i>Penyewaan</a></li>
+            <li><a href="{{ route('admin.pelanggans.index') }}" class="{{ request()->routeIs('admin.pelanggans.*') ? 'active' : '' }}"><i class="fas fa-users"></i>Pelanggan</a></li>
+            <li><a href="#"><i class="fas fa-credit-card"></i>Pembayaran</a></li>
+            <li><a href="{{ route('admin.dashboard.report') }}" class="{{ request()->routeIs('admin.dashboard.report') ? 'active' : '' }}"><i class="fas fa-chart-bar"></i>Laporan</a></li>
+            <li><a href="#"><i class="fas fa-tools"></i>Perawatan</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i>Pengaturan</a></li>
         </ul>
-      </nav>
+    </div>

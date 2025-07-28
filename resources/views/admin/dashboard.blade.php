@@ -1,374 +1,222 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
-
 @section('content')
+<!-- Page Header -->
+<div class="row mb-4 fade-in-up">
+    <div class="col-12">
+        <h1 class="h3 mb-0 text-gray-800">Admin Dashboard</h1>
+        <p class="mb-0 text-muted">Welcome to the rental car administration panel</p>
+    </div>
+</div>
 
-<!-- Header Section -->
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stat-card fade-in-up">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon me-3">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-1">Total Cars</h6>
+                    <h2 class="stat-number">156</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stat-card success fade-in-up">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon me-3">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-1">Active Bookings</h6>
+                    <h2 class="stat-number">89</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stat-card warning fade-in-up">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon me-3">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-1">Monthly Revenue</h6>
+                    <h2 class="stat-number">$45K</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stat-card danger fade-in-up">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon me-3">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-1">Total Customers</h6>
+                    <h2 class="stat-number">1,234</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
 <div class="row">
-    <div class="col-sm-6">
-        <h3 class="mb-0 font-weight-bold">Kenneth Osborne</h3>
-        <p class="text-muted">Your last login: 21h ago from newzealand.</p>
+    <div class="col-xl-8 col-lg-7">
+        <div class="chart-card fade-in-up">
+            <h5 class="card-title mb-4">
+                <i class="fas fa-chart-line me-2"></i>
+                Revenue Overview
+            </h5>
+            <div class="chart-container-fixed-height">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-6">
-        <div class="d-flex align-items-center justify-content-md-end">
-            <div class="mb-3 mb-xl-0 pr-1">
-                <div class="dropdown">
-                    <button class="btn bg-white btn-sm dropdown-toggle btn-icon-text border mr-2" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="typcn typcn-calendar-outline mr-2"></i>Last 7 days
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                        <h6 class="dropdown-header">Last 14 days</h6>
-                        <a class="dropdown-item" href="#">Last 21 days</a>
-                        <a class="dropdown-item" href="#">Last 28 days</a>
-                    </div>
-                </div>
-            </div>
-            <div class="pr-1 mb-3 mr-2 mb-xl-0">
-                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
-                    <i class="typcn typcn-arrow-forward-outline mr-2"></i>Export
-                </button>
-            </div>
-            <div class="pr-1 mb-3 mb-xl-0">
-                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
-                    <i class="typcn typcn-info-large-outline mr-2"></i>Info
-                </button>
+    <div class="col-xl-4 col-lg-5">
+        <div class="chart-card fade-in-up">
+            <h5 class="card-title mb-4">
+                <i class="fas fa-chart-pie me-2"></i>
+                Car Status
+            </h5>
+            <div class="chart-container-fixed-height">
+                <canvas id="statusChart"></canvas>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Stats Cards Row -->
-<div class="row mt-4">
-    <!-- Sales Analytics Card -->
-    <div class="col-xl-8 col-lg-8 col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                    <h4 class="card-title">Sales Analytics</h4>
-                    <button type="button" class="btn btn-sm btn-light">Month</button>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            <i class="typcn typcn-globe-outline text-primary mr-2"></i>
-                            <div>
-                                <h6 class="mb-0">Online</h6>
-                                <h3 class="text-primary font-weight-bold mb-0">23,342</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            <i class="typcn typcn-archive text-secondary mr-2"></i>
-                            <div>
-                                <h6 class="mb-0">Offline</h6>
-                                <h3 class="text-secondary font-weight-bold mb-0">13,221</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            <i class="typcn typcn-tags text-warning mr-2"></i>
-                            <div>
-                                <h6 class="mb-0">Marketing</h6>
-                                <h3 class="text-warning font-weight-bold mb-0">1,542</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="salesanalyticChart" height="80"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings Card -->
-    <div class="col-xl-4 col-lg-4 col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Earnings Overview</h4>
-
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-info">Total Earning</span>
-                        <span class="text-success font-weight-bold">+1.4%</span>
-                    </div>
-                    <h3 class="font-weight-bold text-dark mb-0">$287,493</h3>
-                    <small class="text-muted">Since Last Month</small>
-                </div>
-
-                <hr class="my-4">
-
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-info">Total Orders</span>
-                        <span class="text-success font-weight-bold">+5.43%</span>
-                    </div>
-                    <h3 class="font-weight-bold text-dark mb-0">87,493</h3>
-                    <small class="text-muted">Since Last Month</small>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="barChartStacked" height="120"></canvas>
-                </div>
-            </div>
-        </div>
+<!-- Recent Bookings Table -->
+<div class="table-card fade-in-up">
+    <h5 class="card-title mb-4">
+        <i class="fas fa-calendar-alt me-2"></i>
+        Recent Bookings
+    </h5>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Car</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#BK001</td>
+                    <td>John Doe</td>
+                    <td>Toyota Camry</td>
+                    <td>2025-07-28</td>
+                    <td><span class="badge bg-success">Active</span></td>
+                    <td>$350</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#BK002</td>
+                    <td>Jane Smith</td>
+                    <td>Honda Civic</td>
+                    <td>2025-07-27</td>
+                    <td><span class="badge bg-warning">Pending</span></td>
+                    <td>$280</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#BK003</td>
+                    <td>Mike Johnson</td>
+                    <td>BMW X5</td>
+                    <td>2025-07-26</td>
+                    <td><span class="badge bg-success">Active</span></td>
+                    <td>$750</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#BK004</td>
+                    <td>Sarah Wilson</td>
+                    <td>Audi A4</td>
+                    <td>2025-07-25</td>
+                    <td><span class="badge bg-danger">Cancelled</span></td>
+                    <td>$420</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
-<!-- E-Commerce Analytics Row -->
-<div class="row">
-    <div class="col-lg-8 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">E-Commerce Analytics</h4>
-
-                <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-                    <div class="dropdown">
-                        <button class="btn bg-white btn-sm dropdown-toggle btn-icon-text border" type="button" id="dropdownMenuSizeButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Mon, 1 Oct 2019 - Tue, 2 Oct 2019
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton4">
-                            <h6 class="dropdown-header">Mon, 17 Oct 2019 - Tue, 25 Oct 2019</h6>
-                            <a class="dropdown-item" href="#">Tue, 18 Oct 2019 - Wed, 26 Oct 2019</a>
-                            <a class="dropdown-item" href="#">Wed, 19 Oct 2019 - Thu, 26 Oct 2019</a>
-                        </div>
-                    </div>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sm btn-light">Day</button>
-                        <button type="button" class="btn btn-sm btn-light">Week</button>
-                        <button type="button" class="btn btn-sm btn-light">Month</button>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="ecommerceAnalytic" height="100"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Analytics Stats -->
-    <div class="col-lg-4 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Analytics Stats</h4>
-
-                <div class="mb-4">
-                    <h6 class="text-success font-weight-bold mb-3">Inbound Traffic</h6>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Current</span>
-                        <span class="text-muted">38.34M</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Average</span>
-                        <span class="text-muted">38.34M</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Maximum</span>
-                        <span class="text-muted">68.14M</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <span>60th %</span>
-                        <span class="text-muted">168.3GB</span>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="mt-4">
-                    <h6 class="text-success font-weight-bold mb-3">Outbound Traffic</h6>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Current</span>
-                        <span class="text-muted">458.77M</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Average</span>
-                        <span class="text-muted">1.45K</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Maximum</span>
-                        <span class="text-muted">15.50K</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <span>60th %</span>
-                        <span class="text-muted">45.5</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Sale Analysis Trend -->
-<div class="row">
-    <div class="col-lg-4 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Sale Analysis Trend</h4>
-
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>Order Value</span>
-                        <span class="text-primary font-weight-bold">155.5%</span>
-                    </div>
-                    <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-secondary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>Total Products</span>
-                        <span class="text-success font-weight-bold">238.2%</span>
-                    </div>
-                    <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>Quantity</span>
-                        <span class="text-warning font-weight-bold">23.30%</span>
-                    </div>
-                    <div class="progress mb-4" style="height: 8px;">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="salesTopChart" height="120"></canvas>
-                </div>
-            </div>
-        </div>
-       
-    </div>
-    <div class="row">
-    <div class="col-lg-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">User Logins (User Role)</h4>
-                <canvas id="userLoginsChart"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Website Visitors (IP Address)</h4>
-                <canvas id="visitorChart"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Product Uploads (Last 30 Days)</h4>
-                <canvas id="productUploadsChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-</div> 
-<!-- content-wrapper ends -->
-</div>@include('layouts._partials.footer')
 @endsection
 
 @push('scripts')
-<script src="{{ url('assets/js/dashboard.js') }}"></script>
 <script>
-    var userLoginsLabels = @json($labels);
-    var userLoginsData = @json($data);
-
-    var visitorLabels = @json($visitorLabels);
-    var visitorCounts = @json($visitorCounts);
-
-    var productLabels = @json($productLabels);
-    var productData = @json($productData);
-
-    var ctx = document.getElementById('userLoginsChart').getContext('2d');
-    var userLoginsChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: userLoginsLabels,
-            datasets: [{
-                label: 'Number of User Logins',
-                data: userLoginsData,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
+    document.addEventListener('DOMContentLoaded', function () {
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [12000, 19000, 3000, 5000, 2000, 30000, 45000],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
             }
-        }
-    });
+        });
 
-    var visitorCtx = document.getElementById('visitorChart').getContext('2d');
-    var visitorChart = new Chart(visitorCtx, {
-        type: 'bar',
-        data: {
-            labels: visitorLabels,
-            datasets: [{
-                label: 'Website Visitors',
-                data: visitorCounts,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
-                    }
-                }
+        // Car Status Chart
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Available', 'Rented', 'Maintenance'],
+                datasets: [{
+                    label: 'Car Status',
+                    data: [100, 40, 16],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(255, 159, 64, 0.8)',
+                        'rgba(255, 99, 132, 0.8)'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
             }
-        }
-    });
-
-    var productCtx = document.getElementById('productUploadsChart').getContext('2d');
-    var productUploadsChart = new Chart(productCtx, {
-        type: 'line',
-        data: {
-            labels: productLabels,
-            datasets: [{
-                label: 'Products Uploaded',
-                data: productData,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
-                    }
-                }
-            }
-        }
+        });
     });
 </script>
 @endpush

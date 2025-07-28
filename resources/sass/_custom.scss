@@ -1,0 +1,11 @@
+.chart-container-fixed-height {
+    position: relative;
+    height: 50vh; /* Increased height */
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .chart-container-fixed-height {
+        height: 40vh; /* Adjust for smaller screens */
+    }
+}
