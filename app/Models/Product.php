@@ -38,16 +38,18 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function setSlugAttribute($value)
+    protected static function boot()
     {
-        $slug = Str::slug($this->name);
-        $originalSlug = $slug;
-        $count = 1;
+        parent::boot();
 
-        while (static::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count++;
-        }
+        static::creating(function ($product) {
+            $product->slug = Str::slug($product->name);
+        });
 
-        $this->attributes['slug'] = $slug;
+        static::updating(function ($product) {
+            if ($product->isDirty('name')) {
+                $product->slug = Str::slug($product->name);
+            }
+        });
     }
 }

@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\UserLogin;
 use App\Models\User;
 use App\Models\Visitor;
+use App\Models\Product; // Added for Product model
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon; // Added for date manipulation
 
 class AdminController extends Controller
 {
@@ -31,6 +33,17 @@ class AdminController extends Controller
         $visitorLabels = $visitorData->pluck('visit_date');
         $visitorCounts = $visitorData->pluck('total_visits');
 
-        return view('admin.dashboard', compact('labels', 'data', 'visitorLabels', 'visitorCounts'));
+        // New: Product Upload Chart Data
+        $productUploads = Product::select(DB::raw('DATE(created_at) as upload_date'), DB::raw('count(*) as total_uploads'))
+            ->groupBy('upload_date')
+            ->orderBy('upload_date', 'asc')
+            ->get();
+
+        $productLabels = $productUploads->pluck('upload_date')->map(function ($date) {
+            return Carbon::parse($date)->format('M d'); // Format date like "Jul 25"
+        });
+        $productData = $productUploads->pluck('total_uploads');
+
+        return view('admin.dashboard', compact('labels', 'data', 'visitorLabels', 'visitorCounts', 'productLabels', 'productData'));
     }
 }

@@ -21,6 +21,19 @@
     <!-- Additional styles -->
     @stack('styles')
     <link rel="stylesheet" href="{{ url('assets/css/custom.css') }}">
+    <style>
+        .popup-message {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1050;
+            width: auto;
+            max-width: 90%;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
 </head>
 
 <body>
@@ -39,12 +52,15 @@
             <div class="main-panel">
                 <div class="content-wrapper">
                     @if ($message = Session::get('success'))
+                    <div id="success-popup" class="popup-message">
                         <div class="alert alert-success">
                             <p>{{ $message }}</p>
                         </div>
+                    </div>
                     @endif
 
                     @if ($errors->any())
+                    <div id="error-popup" class="popup-message">
                         <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
                             <ul>
@@ -53,6 +69,7 @@
                                 @endforeach
                             </ul>
                         </div>
+                    </div>
                     @endif
 
                     @yield('content')
@@ -86,6 +103,26 @@
     
     <!-- Page specific scripts -->
     @stack('scripts')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const popup = document.getElementById('success-popup');
+            if (popup) {
+                setTimeout(() => {
+                    popup.style.opacity = '0';
+                    setTimeout(() => popup.style.display = 'none', 500); // Wait for fade out to complete
+                }, 2000); // 2 seconds
+            }
+
+            const errorPopup = document.getElementById('error-popup');
+            if (errorPopup) {
+                setTimeout(() => {
+                    errorPopup.style.opacity = '0';
+                    setTimeout(() => errorPopup.style.display = 'none', 500); // Wait for fade out to complete
+                }, 2000); // 2 seconds
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -265,6 +265,14 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Product Uploads (Last 30 Days)</h4>
+                <canvas id="productUploadsChart"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 </div> 
 <!-- content-wrapper ends -->
@@ -279,6 +287,9 @@
 
     var visitorLabels = @json($visitorLabels);
     var visitorCounts = @json($visitorCounts);
+
+    var productLabels = @json($productLabels);
+    var productData = @json($productData);
 
     var ctx = document.getElementById('userLoginsChart').getContext('2d');
     var userLoginsChart = new Chart(ctx, {
@@ -318,6 +329,33 @@
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    var productCtx = document.getElementById('productUploadsChart').getContext('2d');
+    var productUploadsChart = new Chart(productCtx, {
+        type: 'line',
+        data: {
+            labels: productLabels,
+            datasets: [{
+                label: 'Products Uploaded',
+                data: productData,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                fill: true
             }]
         },
         options: {
