@@ -6,9 +6,9 @@
     <div class="card-body">
         <p><strong>Mobil:</strong> {{ $penyewaan->mobil->merk }} ({{ $penyewaan->mobil->nopol }})</p>
         <p><strong>Pelanggan:</strong> {{ $penyewaan->pelanggan->nama }}</p>
-        <p><strong>Tanggal Sewa:</strong> {{ $penyewaan->tanggal_sewa }}</p>
-        <p><strong>Tanggal Kembali:</strong> {{ $penyewaan->tanggal_kembali }}</p>
-        <p><strong>Tanggal Kembali Aktual:</strong> {{ $penyewaan->tanggal_kembali_aktual ?? '-' }}</p>
+        <p><strong>Tanggal Sewa:</strong> {{ $penyewaan->tanggal_sewa->translatedFormat('d F Y') }}</p>
+        <p><strong>Tanggal Kembali:</strong> {{ $penyewaan->tanggal_kembali->translatedFormat('d F Y') }}</p>
+        <p><strong>Tanggal Kembali Aktual:</strong> {{ $penyewaan->tanggal_kembali_aktual ? $penyewaan->tanggal_kembali_aktual->translatedFormat('d F Y') : '-' }}</p>
         <p><strong>Total Biaya:</strong> {{ $penyewaan->total_biaya }}</p>
         <p><strong>Denda:</strong> {{ $penyewaan->denda }}</p>
         <p><strong>Status:</strong> {{ $penyewaan->status }}</p>

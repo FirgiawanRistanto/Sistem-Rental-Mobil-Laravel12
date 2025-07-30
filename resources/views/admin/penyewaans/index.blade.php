@@ -25,18 +25,12 @@
                 <tr>
                     <td>{{ $penyewaan->mobil->merk }} ({{ $penyewaan->mobil->nopol }})</td>
                     <td>{{ $penyewaan->pelanggan->nama }}</td>
-                    <td>{{ $penyewaan->tanggal_sewa }}</td>
-                    <td>{{ $penyewaan->tanggal_kembali }}</td>
-                    <td>{{ $penyewaan->total_biaya }}</td>
+                    <td>{{ $penyewaan->tanggal_sewa->translatedFormat('d F Y') }}</td>
+                    <td>{{ $penyewaan->tanggal_kembali->translatedFormat('d F Y') }}</td>
+                    <td>Rp {{ number_format($penyewaan->total_biaya, 0, ',', '.') }}</td>
                     <td>{{ $penyewaan->status }}</td>
                     <td>
                         <a href="{{ route('admin.penyewaans.show', $penyewaan->id) }}" class="btn btn-info btn-sm">Lihat</a>
-                        <a href="{{ route('admin.penyewaans.edit', $penyewaan->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('admin.penyewaans.destroy', $penyewaan->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                        </form>
                     </td>
                 </tr>
                 @endforeach

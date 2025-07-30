@@ -29,14 +29,13 @@ class MobilController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'merk' => 'required|string|max:255',
-            'tipe' => 'required|string|max:255',
-            'nopol' => 'required|string|max:255|unique:mobils',
-            'harga_sewa' => 'required|integer|min:0',
-            'denda_per_hari' => 'required|integer|min:0',
-            'status' => 'required|in:Tersedia,Disewa',
-        ]);
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), \App\Models\Mobil::rules(), \App\Models\Mobil::messages());
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
 
         Mobil::create($request->all());
 
@@ -64,14 +63,13 @@ class MobilController extends Controller
      */
     public function update(Request $request, Mobil $mobil)
     {
-        $request->validate([
-            'merk' => 'required|string|max:255',
-            'tipe' => 'required|string|max:255',
-            'nopol' => 'required|string|max:255|unique:mobils,nopol,' . $mobil->id,
-            'harga_sewa' => 'required|integer|min:0',
-            'denda_per_hari' => 'required|integer|min:0',
-            'status' => 'required|in:Tersedia,Disewa',
-        ]);
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), \App\Models\Mobil::rules($mobil->id), \App\Models\Mobil::messages());
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
 
         $mobil->update($request->all());
 

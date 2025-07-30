@@ -4,7 +4,6 @@
 <div class="card">
     <div class="card-header">Manajemen Pelanggan</div>
     <div class="card-body">
-        <a href="{{ route('admin.pelanggans.create') }}" class="btn btn-primary mb-3">Tambah Pelanggan Baru</a>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
@@ -27,12 +26,6 @@
                     <td>{{ $pelanggan->alamat }}</td>
                     <td>
                         <a href="{{ route('admin.pelanggans.show', $pelanggan->id) }}" class="btn btn-info btn-sm">Lihat</a>
-                        <a href="{{ route('admin.pelanggans.edit', $pelanggan->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('admin.pelanggans.destroy', $pelanggan->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                        </form>
                     </td>
                 </tr>
                 @endforeach

@@ -10,7 +10,7 @@
                 <label for="mobil_id" class="form-label">Mobil:</label>
                 <select class="form-select" id="mobil_id" name="mobil_id" required>
                     @foreach($mobils as $mobil)
-                        <option value="{{ $mobil->id }}">{{ $mobil->merk }} ({{ $mobil->nopol }})</option>
+                        <option value="{{ $mobil->id }}" data-harga="{{ $mobil->harga_sewa }}">{{ $mobil->merk }} ({{ $mobil->nopol }})</option>
                     @endforeach
                 </select>
                 @error('mobil_id')
@@ -18,13 +18,30 @@
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="pelanggan_id" class="form-label">Pelanggan:</label>
-                <select class="form-select" id="pelanggan_id" name="pelanggan_id" required>
-                    @foreach($pelanggans as $pelanggan)
-                        <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama }} ({{ $pelanggan->no_ktp }})</option>
-                    @endforeach
-                </select>
-                @error('pelanggan_id')
+                <label for="nama" class="form-label">Nama Pelanggan:</label>
+                <input type="text" class="form-control" id="nama" name="nama" required>
+                @error('nama')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="no_ktp" class="form-label">No. KTP/SIM:</label>
+                <input type="text" class="form-control" id="no_ktp" name="no_ktp" required maxlength="16">
+                @error('no_ktp')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="no_hp" class="form-label">Nomor HP:</label>
+                <input type="text" class="form-control" id="no_hp" name="no_hp" required maxlength="13">
+                @error('no_hp')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="alamat" class="form-label">Alamat:</label>
+                <textarea class="form-control" id="alamat" name="alamat" rows="3" required></textarea>
+                @error('alamat')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -44,7 +61,7 @@
             </div>
             <div class="mb-3">
                 <label for="total_biaya" class="form-label">Total Biaya:</label>
-                <input type="number" class="form-control" id="total_biaya" name="total_biaya" required>
+                <input type="text" class="form-control" id="total_biaya" name="total_biaya" required readonly style="background-color: #e9ecef;">
                 @error('total_biaya')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -64,4 +81,36 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const mobilSelect = document.getElementById('mobil_id');
+        const tanggalSewaInput = document.getElementById('tanggal_sewa');
+        const tanggalKembaliInput = document.getElementById('tanggal_kembali');
+        const totalBiayaInput = document.getElementById('total_biaya');
+
+        function calculateTotal() {
+            const selectedMobil = mobilSelect.options[mobilSelect.selectedIndex];
+            const hargaSewa = selectedMobil.getAttribute('data-harga');
+            const tanggalSewa = new Date(tanggalSewaInput.value);
+            const tanggalKembali = new Date(tanggalKembaliInput.value);
+
+            if (hargaSewa && tanggalSewa && tanggalKembali && tanggalKembali >= tanggalSewa) {
+                const diffTime = Math.abs(tanggalKembali - tanggalSewa);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                const totalBiaya = diffDays * hargaSewa;
+                totalBiayaInput.value = totalBiaya;
+            } else {
+                totalBiayaInput.value = 0;
+            }
+        }
+
+        mobilSelect.addEventListener('change', calculateTotal);
+        tanggalSewaInput.addEventListener('change', calculateTotal);
+        tanggalKembaliInput.addEventListener('change', calculateTotal);
+    });
+</script>
+@endpush
+
 @endsection

@@ -24,8 +24,7 @@ class PenyewaanController extends Controller
     public function create()
     {
         $mobils = Mobil::where('status', 'Tersedia')->get();
-        $pelanggans = Pelanggan::all();
-        return view('admin.penyewaans.create', compact('mobils', 'pelanggans'));
+        return view('admin.penyewaans.create', compact('mobils'));
     }
 
     /**
@@ -33,16 +32,60 @@ class PenyewaanController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'mobil_id' => 'required|exists:mobils,id',
-            'pelanggan_id' => 'required|exists:pelanggans,id',
-            'tanggal_sewa' => 'required|date',
-            'tanggal_kembali' => 'required|date|after_or_equal:tanggal_sewa',
-            'total_biaya' => 'required|integer|min:0',
-            'status' => 'required|in:Disewa,Selesai',
-        ]);
+        $rules = \App\Models\Penyewaan::rules();
+        $messages = \App\Models\Penyewaan::messages();
 
-        $penyewaan = Penyewaan::create($request->all());
+        // Add customer-related rules
+        $rules['nama'] = 'required|string|max:255';
+        $rules['no_ktp'] = 'required|string|max:16|unique:pelanggans,no_ktp';
+        $rules['no_hp'] = 'required|string|max:13';
+        $rules['alamat'] = 'required|string';
+
+        // Add customer-related messages
+        $messages['nama.required'] = 'Nama pelanggan wajib diisi.';
+        $messages['nama.string'] = 'Nama pelanggan harus berupa teks.';
+        $messages['nama.max'] = 'Nama pelanggan tidak boleh lebih dari 255 karakter.';
+        $messages['no_ktp.required'] = 'Nomor KTP/SIM wajib diisi.';
+        $messages['no_ktp.string'] = 'Nomor KTP/SIM harus berupa teks.';
+        $messages['no_ktp.max'] = 'Nomor KTP/SIM tidak boleh lebih dari 16 karakter.';
+        $messages['no_ktp.unique'] = 'Nomor KTP/SIM sudah terdaftar.';
+        $messages['no_hp.required'] = 'Nomor HP wajib diisi.';
+        $messages['no_hp.string'] = 'Nomor HP harus berupa teks.';
+        $messages['no_hp.max'] = 'Nomor HP tidak boleh lebih dari 13 karakter.';
+        $messages['alamat.required'] = 'Alamat wajib diisi.';
+        $messages['alamat.string'] = 'Alamat harus berupa teks.';
+
+        // Remove 'pelanggan_id' and 'denda' from Penyewaan rules as they are not directly from request for store
+        unset($rules['pelanggan_id']);
+        unset($rules['denda']);
+        unset($rules['tanggal_kembali_aktual']); // Not needed for store
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        // Find or create customer
+        $pelanggan = Pelanggan::firstOrCreate(
+            ['no_ktp' => $request->no_ktp],
+            [
+                'nama' => $request->nama,
+                'no_hp' => $request->no_hp,
+                'alamat' => $request->alamat,
+            ]
+        );
+
+        $penyewaan = Penyewaan::create([
+            'mobil_id' => $request->mobil_id,
+            'pelanggan_id' => $pelanggan->id,
+            'tanggal_sewa' => $request->tanggal_sewa,
+            'tanggal_kembali' => $request->tanggal_kembali,
+            'total_biaya' => $request->total_biaya,
+            'status' => $request->status,
+        ]);
 
         // Update mobil status to 'Disewa'
         $mobil = Mobil::find($request->mobil_id);
@@ -63,69 +106,65 @@ class PenyewaanController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for returning a car.
      */
-    public function edit(Penyewaan $penyewaan)
+    public function showPengembalianForm()
     {
-        $mobils = Mobil::all();
-        $pelanggans = Pelanggan::all();
-        return view('admin.penyewaans.edit', compact('penyewaan', 'mobils', 'pelanggans'));
+        $penyewaans = Penyewaan::where('status', 'Disewa')->get();
+        return view('admin.pengembalian.index', compact('penyewaans'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Process the car return.
      */
-    public function update(Request $request, Penyewaan $penyewaan)
+    public function prosesPengembalian(Request $request, Penyewaan $penyewaan)
     {
-        $request->validate([
-            'mobil_id' => 'required|exists:mobils,id',
-            'pelanggan_id' => 'required|exists:pelanggans,id',
-            'tanggal_sewa' => 'required|date',
-            'tanggal_kembali' => 'required|date|after_or_equal:tanggal_sewa',
-            'tanggal_kembali_aktual' => 'nullable|date|after_or_equal:tanggal_sewa',
-            'total_biaya' => 'required|integer|min:0',
-            'status' => 'required|in:Disewa,Selesai',
-        ]);
+        // Debugging: Dump all request data
+        // dd($request->all());
 
-        $data = $request->all();
-        $denda = 0;
+        $rules = [
+            'tanggal_kembali_aktual' => 'required|date|after_or_equal:tanggal_sewa',
+            'denda' => 'nullable|integer|min:0',
+        ];
 
-        if ($request->status == 'Selesai' && $request->tanggal_kembali_aktual) {
-            $tanggalKembaliTerlambat = \Carbon\Carbon::parse($request->tanggal_kembali_aktual);
-            $tanggalKembaliSeharusnya = \Carbon\Carbon::parse($request->tanggal_kembali);
+        $messages = [
+            'tanggal_kembali_aktual.required' => 'Tanggal kembali aktual wajib diisi.',
+            'tanggal_kembali_aktual.date' => 'Tanggal kembali aktual harus berupa tanggal yang valid.',
+            'tanggal_kembali_aktual.after_or_equal' => 'Tanggal kembali aktual harus setelah atau sama dengan tanggal sewa.',
+            'denda.integer' => 'Denda harus berupa angka.',
+            'denda.min' => 'Denda tidak boleh kurang dari 0.',
+        ];
 
-            if ($tanggalKembaliTerlambat->greaterThan($tanggalKembaliSeharusnya)) {
-                $selisihHari = $tanggalKembaliTerlambat->diffInDays($tanggalKembaliSeharusnya);
-                $mobil = Mobil::find($request->mobil_id);
-                if ($mobil) {
-                    $denda = $selisihHari * $mobil->denda_per_hari;
-                }
-            }
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            // Debugging: Dump validation errors
+            // dd($validator->errors());
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
         }
 
-        $data['denda'] = $denda;
-        $data['total_biaya'] = $request->total_biaya + $denda; // Add fine to total_biaya
+        $penyewaan->tanggal_kembali_aktual = $request->tanggal_kembali_aktual;
+        $penyewaan->status = 'Selesai';
 
-        $penyewaan->update($data);
+        $tanggalKembaliSeharusnya = \Carbon\Carbon::parse($penyewaan->tanggal_kembali)->startOfDay();
+        $tanggalKembaliAktual = \Carbon\Carbon::parse($request->tanggal_kembali_aktual)->startOfDay();
 
-        // Update mobil status if rental status changes to 'Selesai'
-        if ($request->status == 'Selesai') {
-            $mobil = Mobil::find($penyewaan->mobil_id);
-            if ($mobil) {
-                $mobil->status = 'Tersedia';
-                $mobil->save();
-            }
+        if ($tanggalKembaliAktual->greaterThan($tanggalKembaliSeharusnya)) {
+            $mobil = $penyewaan->mobil;
+            $dendaPerHari = $mobil->denda_per_hari;
+            $selisihHari = abs($tanggalKembaliAktual->diffInDays($tanggalKembaliSeharusnya)); // Menggunakan abs() untuk memastikan nilai positif
+            $penyewaan->denda = $selisihHari * $dendaPerHari;
         }
 
-        return redirect()->route('admin.penyewaans.index')->with('success', 'Penyewaan updated successfully!');
-    }
+        $penyewaan->save();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Penyewaan $penyewaan)
-    {
-        // Deletion logic will go here
-        return redirect()->route('admin.penyewaans.index')->with('success', 'Penyewaan deleted successfully!');
+        // Update mobil status to 'Tersedia'
+        $mobil = $penyewaan->mobil;
+        $mobil->status = 'Tersedia';
+        $mobil->save();
+
+        return redirect()->route('admin.pengembalian.index')->with('success', 'Mobil berhasil dikembalikan.');
     }
 }

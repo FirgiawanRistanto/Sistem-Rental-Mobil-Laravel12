@@ -12,7 +12,7 @@
                     <label for="month" class="form-label">Bulan:</label>
                     <select name="month" id="month" class="form-select">
                         @for ($i = 1; $i <= 12; $i++)
-                            <option value="{{ sprintf('%02d', $i) }}" {{ $month == sprintf('%02d', $i) ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $i, 10)) }}</option>
+                            <option value="{{ sprintf('%02d', $i) }}" {{ $month == sprintf('%02d', $i) ? 'selected' : '' }}>{{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}</option>
                         @endfor
                     </select>
                 </div>
@@ -21,7 +21,10 @@
                     <input type="number" name="year" id="year" class="form-control" value="{{ $year }}">
                 </div>
                 <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary w-100"><i class="fas fa-filter me-2"></i>Tampilkan Laporan</button>
+                    <div class="d-flex">
+                        <button type="submit" class="btn btn-primary flex-fill me-1"><i class="fas fa-filter me-2"></i>Tampilkan Laporan</button>
+                        <a href="{{ route('admin.reports.export', ['month' => $month, 'year' => $year]) }}" target="_blank" class="btn btn-success flex-fill ms-1"><i class="fas fa-file-export me-2"></i>Export</a>
+                    </div>
                 </div>
             </div>
         </form>

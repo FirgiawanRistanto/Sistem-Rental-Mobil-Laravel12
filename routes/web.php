@@ -35,11 +35,16 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
     Route::resource('mobils', MobilController::class);
 
     // Pelanggan Routes
-    Route::resource('pelanggans', PelangganController::class);
+    Route::resource('pelanggans', PelangganController::class)->only(['index', 'show']);
 
     // Penyewaan Routes
     Route::resource('penyewaans', PenyewaanController::class);
 
+    // Pengembalian Routes
+    Route::get('pengembalian', [PenyewaanController::class, 'showPengembalianForm'])->name('pengembalian.index');
+    Route::post('pengembalian/{penyewaan}', [PenyewaanController::class, 'prosesPengembalian'])->name('pengembalian.store');
+
     // Report Routes
     Route::get('reports/monthly', [DashboardController::class, 'report'])->name('dashboard.report');
+    Route::get('reports/export', [DashboardController::class, 'export'])->name('reports.export');
 });

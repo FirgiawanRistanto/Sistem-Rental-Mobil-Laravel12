@@ -25,7 +25,7 @@
                     <td>{{ $mobil->merk }}</td>
                     <td>{{ $mobil->tipe }}</td>
                     <td>{{ $mobil->nopol }}</td>
-                    <td>{{ $mobil->harga_sewa }}</td>
+                    <td>Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }}</td>
                     <td>{{ $mobil->status }}</td>
                     <td>
                         <a href="{{ route('admin.mobils.show', $mobil->id) }}" class="btn btn-info btn-sm">Lihat</a>
