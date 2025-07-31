@@ -26,7 +26,17 @@
                     <td>{{ $mobil->tipe }}</td>
                     <td>{{ $mobil->nopol }}</td>
                     <td>Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }}</td>
-                    <td>{{ $mobil->status }}</td>
+                    <td>
+                        @if($mobil->status == 'tersedia')
+                            <span class="badge bg-success">Tersedia</span>
+                        @elseif($mobil->status == 'disewa')
+                            <span class="badge bg-primary">Disewa</span>
+                        @elseif($mobil->status == 'perawatan')
+                            <span class="badge bg-danger">Perawatan</span>
+                        @else
+                            <span class="badge bg-secondary">{{ ucfirst($mobil->status) }}</span>
+                        @endif
+                    </td>
                     <td>
                         <a href="{{ route('admin.mobils.show', $mobil->id) }}" class="btn btn-info btn-sm">Lihat</a>
                         <a href="{{ route('admin.mobils.edit', $mobil->id) }}" class="btn btn-warning btn-sm">Edit</a>

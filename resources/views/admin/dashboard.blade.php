@@ -11,58 +11,47 @@
 
 <!-- Stats Cards -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-4 mb-4">
         <div class="stat-card fade-in-up">
             <div class="d-flex align-items-center">
                 <div class="stat-icon me-3">
                     <i class="fas fa-car"></i>
                 </div>
                 <div>
-                    <h6 class="text-muted mb-1">Total Cars</h6>
-                    <h2 class="stat-number">156</h2>
+                    <h6 class="text-muted mb-1">Total Mobil</h6>
+                    <h2 class="stat-number">{{ $totalMobil }}</h2>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stat-card success fade-in-up">
-            <div class="d-flex align-items-center">
-                <div class="stat-icon me-3">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div>
-                    <h6 class="text-muted mb-1">Active Bookings</h6>
-                    <h2 class="stat-number">89</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+
+    <div class="col-xl-4 col-md-4 mb-4">
         <div class="stat-card warning fade-in-up">
             <div class="d-flex align-items-center">
                 <div class="stat-icon me-3">
-                    <i class="fas fa-dollar-sign"></i>
+                    <i class="fas fa-tools"></i>
                 </div>
                 <div>
-                    <h6 class="text-muted mb-1">Monthly Revenue</h6>
-                    <h2 class="stat-number">$45K</h2>
+                    <h6 class="text-muted mb-1">Mobil Dalam Perawatan</h6>
+                    <h2 class="stat-number">{{ $mobilPerawatan }}</h2>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stat-card danger fade-in-up">
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="stat-card primary fade-in-up">
             <div class="d-flex align-items-center">
                 <div class="stat-icon me-3">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-calendar-alt"></i>
                 </div>
                 <div>
-                    <h6 class="text-muted mb-1">Total Customers</h6>
-                    <h2 class="stat-number">1,234</h2>
+                    <h6 class="text-muted mb-1">Penyewaan Aktif</h6>
+                    <h2 class="stat-number">{{ $penyewaanAktif }}</h2>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <!-- Charts Row -->
@@ -82,7 +71,7 @@
         <div class="chart-card fade-in-up">
             <h5 class="card-title mb-4">
                 <i class="fas fa-chart-pie me-2"></i>
-                Car Status
+                Status Mobil
             </h5>
             <div class="chart-container-fixed-height">
                 <canvas id="statusChart"></canvas>
@@ -168,16 +157,16 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // Revenue Chart
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
         new Chart(revenueCtx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                labels: @json($revenueLabels),
                 datasets: [{
                     label: 'Revenue',
-                    data: [12000, 19000, 3000, 5000, 2000, 30000, 45000],
+                    data: @json($revenueData),
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     fill: true,
@@ -200,14 +189,15 @@
         new Chart(statusCtx, {
             type: 'pie',
             data: {
-                labels: ['Available', 'Rented', 'Maintenance'],
+                labels: @json($labels),
                 datasets: [{
-                    label: 'Car Status',
-                    data: [100, 40, 16],
+                    label: 'Status Mobil',
+                    data: @json($data),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(255, 159, 64, 0.8)',
-                        'rgba(255, 99, 132, 0.8)'
+                        'rgba(75, 192, 192, 0.8)', // Example color for 'Tersedia'
+                        'rgba(255, 159, 64, 0.8)', // Example color for 'Disewa'
+                        'rgba(255, 99, 132, 0.8)', // Example color for 'Perawatan'
+                        // Add more colors if there are more statuses
                     ],
                     hoverOffset: 4
                 }]

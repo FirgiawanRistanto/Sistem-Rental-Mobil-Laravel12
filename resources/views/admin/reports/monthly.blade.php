@@ -58,6 +58,32 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title"><i class="fas fa-wrench me-2"></i>Total Biaya Perawatan</h5>
+                        <p class="card-text fs-2 fw-bold">Rp {{ number_format($totalBiayaPerawatan, 0, ',', '.') }}</p>
+                    </div>
+                    <i class="fas fa-tools fa-3x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title"><i class="fas fa-money-check-alt me-2"></i>Pendapatan Bersih</h5>
+                        <p class="card-text fs-2 fw-bold">Rp {{ number_format($pendapatanBersih, 0, ',', '.') }}</p>
+                    </div>
+                    <i class="fas fa-hand-holding-usd fa-3x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="card">

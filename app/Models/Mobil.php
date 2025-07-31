@@ -23,7 +23,7 @@ class Mobil extends Model
             'nopol' => 'required|string|max:255|unique:mobils,nopol,' . $id,
             'harga_sewa' => 'required|integer|min:0',
             'denda_per_hari' => 'required|integer|min:0',
-            'status' => 'required|in:Tersedia,Disewa',
+            'status' => 'required|in:tersedia,disewa,perawatan',
         ];
     }
 
@@ -54,5 +54,10 @@ class Mobil extends Model
     public function penyewaans()
     {
         return $this->hasMany(Penyewaan::class);
+    }
+
+    public function perawatans()
+    {
+        return $this->hasMany(Perawatan::class);
     }
 }

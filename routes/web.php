@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PenyewaanController;
+use App\Http\Controllers\PerawatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,11 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
 
     // Penyewaan Routes
     Route::resource('penyewaans', PenyewaanController::class);
+
+    // Perawatan Routes
+    Route::get('perawatans/{perawatan}/complete', [PerawatanController::class, 'showCompleteForm'])->name('perawatans.completeForm');
+    Route::put('perawatans/{perawatan}/complete', [PerawatanController::class, 'complete'])->name('perawatans.complete');
+    Route::resource('perawatans', PerawatanController::class);
 
     // Pengembalian Routes
     Route::get('pengembalian', [PenyewaanController::class, 'showPengembalianForm'])->name('pengembalian.index');

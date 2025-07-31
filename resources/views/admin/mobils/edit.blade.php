@@ -45,8 +45,9 @@
             <div class="mb-3">
                 <label for="status" class="form-label">Status:</label>
                 <select class="form-select" id="status" name="status">
-                    <option value="Tersedia" {{ $mobil->status == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                    <option value="Disewa" {{ $mobil->status == 'Disewa' ? 'selected' : '' }}>Disewa</option>
+                    <option value="tersedia" {{ $mobil->status == 'tersedia' ? 'selected' : '' }}>Tersedia</option>
+                    <option value="disewa" {{ $mobil->status == 'disewa' ? 'selected' : '' }}>Disewa</option>
+                    <option value="perawatan" {{ $mobil->status == 'perawatan' ? 'selected' : '' }}>Perawatan</option>
                 </select>
                 @error('status')
                     <div class="text-danger">{{ $message }}</div>

@@ -44,8 +44,9 @@
             <div class="mb-3">
                 <label for="status" class="form-label">Status:</label>
                 <select class="form-select" id="status" name="status">
-                    <option value="Tersedia">Tersedia</option>
-                    <option value="Disewa">Disewa</option>
+                    <option value="tersedia">Tersedia</option>
+                    <option value="disewa">Disewa</option>
+                    <option value="perawatan">Perawatan</option>
                 </select>
                 @error('status')
                     <div class="text-danger">{{ $message }}</div>

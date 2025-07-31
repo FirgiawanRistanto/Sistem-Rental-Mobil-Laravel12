@@ -190,6 +190,14 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .stat-card h6 {
+            font-size: 1rem; /* Slightly larger for the title */
+        }
+
+        .stat-card h2 {
+            font-size: 2.2rem; /* Slightly larger for the number */
+        }
+
         /* Chart Card */
         .chart-card {
             background: white;

@@ -70,6 +70,14 @@
                 <td colspan="6" style="text-align: right; font-weight: bold;">Total Pendapatan:</td>
                 <td colspan="2" style="font-weight: bold;">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</td>
             </tr>
+            <tr>
+                <td colspan="6" style="text-align: right; font-weight: bold;">Total Biaya Perawatan:</td>
+                <td colspan="2" style="font-weight: bold;">Rp {{ number_format($totalBiayaPerawatan, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td colspan="6" style="text-align: right; font-weight: bold;">Pendapatan Bersih:</td>
+                <td colspan="2" style="font-weight: bold;">Rp {{ number_format($pendapatanBersih, 0, ',', '.') }}</td>
+            </tr>
         </tfoot>
     </table>
 </body>

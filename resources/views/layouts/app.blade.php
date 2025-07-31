@@ -41,63 +41,9 @@
             document.getElementById('sidebar').classList.toggle('show');
         }
 
-        // Revenue Chart
-        const revenueCtx = document.getElementById('revenueChart');
-        if (revenueCtx) {
-            const revenueChart = new Chart(revenueCtx.getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'Revenue ($)',
-                        data: [30000, 35000, 42000, 38000, 45000, 52000, 48000],
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
+        
 
-        // Status Chart
-        const statusCtx = document.getElementById('statusChart');
-        if (statusCtx) {
-            const statusChart = new Chart(statusCtx.getContext('2d'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Available', 'Rented', 'Maintenance'],
-                    datasets: [{
-                        data: [89, 45, 22],
-                        backgroundColor: ['#38ef7d', '#667eea', '#fc466b'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-        }
+        
 
         // Add fade-in animation on scroll
         const observerOptions = {
