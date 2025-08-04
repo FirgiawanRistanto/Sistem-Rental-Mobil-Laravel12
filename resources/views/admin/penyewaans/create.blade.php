@@ -26,14 +26,14 @@
             </div>
             <div class="mb-3">
                 <label for="no_ktp" class="form-label">No. KTP/SIM:</label>
-                <input type="text" class="form-control" id="no_ktp" name="no_ktp" required maxlength="16">
+                <input type="text" class="form-control" id="no_ktp" name="no_ktp" required maxlength="16" pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 @error('no_ktp')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="no_hp" class="form-label">Nomor HP:</label>
-                <input type="text" class="form-control" id="no_hp" name="no_hp" required maxlength="13">
+                <input type="text" class="form-control" id="no_hp" name="no_hp" required maxlength="13" pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 @error('no_hp')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -47,14 +47,14 @@
             </div>
             <div class="mb-3">
                 <label for="tanggal_sewa" class="form-label">Tanggal Sewa:</label>
-                <input type="date" class="form-control" id="tanggal_sewa" name="tanggal_sewa" required>
+                <input type="text" class="form-control flatpickr" id="tanggal_sewa" name="tanggal_sewa" required>
                 @error('tanggal_sewa')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="tanggal_kembali" class="form-label">Tanggal Kembali:</label>
-                <input type="date" class="form-control" id="tanggal_kembali" name="tanggal_kembali" required>
+                <input type="text" class="form-control flatpickr" id="tanggal_kembali" name="tanggal_kembali" required>
                 @error('tanggal_kembali')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -85,6 +85,14 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        flatpickr(".flatpickr", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d F Y",
+            locale: "id",
+            disableMobile: true,
+        });
+
         const mobilSelect = document.getElementById('mobil_id');
         const tanggalSewaInput = document.getElementById('tanggal_sewa');
         const tanggalKembaliInput = document.getElementById('tanggal_kembali');
@@ -96,7 +104,7 @@
             const tanggalSewa = new Date(tanggalSewaInput.value);
             const tanggalKembali = new Date(tanggalKembaliInput.value);
 
-            if (hargaSewa && tanggalSewa && tanggalKembali && tanggalKembali >= tanggalSewa) {
+            if (hargaSewa && tanggalSewaInput.value && tanggalKembaliInput.value && tanggalKembali >= tanggalSewa) {
                 const diffTime = Math.abs(tanggalKembali - tanggalSewa);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
                 const totalBiaya = diffDays * hargaSewa;

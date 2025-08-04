@@ -4,6 +4,7 @@
 <div class="card">
     <div class="card-header">Detail Penyewaan</div>
     <div class="card-body">
+        <p><strong>Booking ID:</strong> BOOK-{{ str_pad($penyewaan->id, 5, '0', STR_PAD_LEFT) }}</p>
         <p><strong>Mobil:</strong> {{ $penyewaan->mobil->merk }} ({{ $penyewaan->mobil->nopol }})</p>
         <p><strong>Pelanggan:</strong> {{ $penyewaan->pelanggan->nama }}</p>
         <p><strong>Tanggal Sewa:</strong> {{ $penyewaan->tanggal_sewa->translatedFormat('d F Y') }}</p>

@@ -26,6 +26,7 @@
                     <td>{{ $pelanggan->alamat }}</td>
                     <td>
                         <a href="{{ route('admin.pelanggans.show', $pelanggan->id) }}" class="btn btn-info btn-sm">Lihat</a>
+                        <a href="{{ route('admin.pelanggans.edit', $pelanggan->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     </td>
                 </tr>
                 @endforeach

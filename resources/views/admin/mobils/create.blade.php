@@ -29,14 +29,14 @@
             </div>
             <div class="mb-3">
                 <label for="harga_sewa" class="form-label">Harga Sewa per Hari:</label>
-                <input type="number" class="form-control" id="harga_sewa" name="harga_sewa" required>
+                <input type="number" class="form-control" id="harga_sewa" name="harga_sewa" required min="0" oninput="this.value = Math.abs(this.value)">
                 @error('harga_sewa')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="denda_per_hari" class="form-label">Denda per Hari:</label>
-                <input type="number" class="form-control" id="denda_per_hari" name="denda_per_hari" value="0" required>
+                <input type="number" class="form-control" id="denda_per_hari" name="denda_per_hari" value="0" required min="0" oninput="this.value = Math.abs(this.value)">
                 @error('denda_per_hari')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror

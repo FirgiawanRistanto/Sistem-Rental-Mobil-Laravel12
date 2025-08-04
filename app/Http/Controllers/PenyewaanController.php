@@ -14,7 +14,7 @@ class PenyewaanController extends Controller
      */
     public function index()
     {
-        $penyewaans = Penyewaan::all();
+        $penyewaans = Penyewaan::orderBy('tanggal_sewa', 'desc')->get();
         return view('admin.penyewaans.index', compact('penyewaans'));
     }
 
@@ -103,6 +103,37 @@ class PenyewaanController extends Controller
     public function show(Penyewaan $penyewaan)
     {
         return view('admin.penyewaans.show', compact('penyewaan'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Penyewaan $penyewaan)
+    {
+        $mobils = Mobil::where('status', 'Tersedia')->orWhere('id', $penyewaan->mobil_id)->get();
+        $pelanggans = Pelanggan::all();
+        return view('admin.penyewaans.edit', compact('penyewaan', 'mobils', 'pelanggans'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Penyewaan $penyewaan)
+    {
+        $rules = \App\Models\Penyewaan::rules($penyewaan->id);
+        $messages = \App\Models\Penyewaan::messages();
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $penyewaan->update($request->all());
+
+        return redirect()->route('admin.penyewaans.index')->with('success', 'Penyewaan updated successfully!');
     }
 
     /**

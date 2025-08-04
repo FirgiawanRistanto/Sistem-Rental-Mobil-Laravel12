@@ -5,7 +5,7 @@
 <div class="row mb-4 fade-in-up">
     <div class="col-12">
         <h1 class="h3 mb-0 text-gray-800">Admin Dashboard</h1>
-        <p class="mb-0 text-muted">Welcome to the rental car administration panel</p>
+        <p class="mb-0 text-muted">Selamat datang di halaman dashboard admin</p>
     </div>
 </div>
 
@@ -58,10 +58,23 @@
 <div class="row">
     <div class="col-xl-8 col-lg-7">
         <div class="chart-card fade-in-up">
-            <h5 class="card-title mb-4">
-                <i class="fas fa-chart-line me-2"></i>
-                Revenue Overview
-            </h5>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Revenue Overview
+                </h5>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="revenuePeriodDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        12 Bulan Terakhir
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="revenuePeriodDropdown">
+                        <li><a class="dropdown-item" href="#" data-period="12_months">12 Bulan Terakhir</a></li>
+                        <li><a class="dropdown-item" href="#" data-period="year_to_date">Tahun Ini</a></li>
+                        <li><a class="dropdown-item" href="#" data-period="30_days">30 Hari Terakhir</a></li>
+                        <li><a class="dropdown-item" href="#" data-period="last_month">Bulan Lalu</a></li>
+                    </ul>
+                </div>
+            </div>
             <div class="chart-container-fixed-height">
                 <canvas id="revenueChart"></canvas>
             </div>
@@ -74,7 +87,7 @@
                 Status Mobil
             </h5>
             <div class="chart-container-fixed-height">
-                <canvas id="statusChart"></canvas>
+                <canvas id="statusChart" data-labels='@json($labels)' data-data='@json($data)'></canvas>
             </div>
         </div>
     </div>
@@ -84,70 +97,44 @@
 <div class="table-card fade-in-up">
     <h5 class="card-title mb-4">
         <i class="fas fa-calendar-alt me-2"></i>
-        Recent Bookings
+        Penyewaan Terbaru
     </h5>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Booking ID</th>
-                    <th>Customer</th>
-                    <th>Car</th>
-                    <th>Date</th>
+                    <th>ID Sewa</th>
+                    <th>Pelanggan</th>
+                    <th>Mobil</th>
+                    <th>Tanggal</th>
                     <th>Status</th>
-                    <th>Amount</th>
-                    <th>Action</th>
+                    <th>Jumlah</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>#BK001</td>
-                    <td>John Doe</td>
-                    <td>Toyota Camry</td>
-                    <td>2025-07-28</td>
-                    <td><span class="badge bg-success">Active</span></td>
-                    <td>$350</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>#BK002</td>
-                    <td>Jane Smith</td>
-                    <td>Honda Civic</td>
-                    <td>2025-07-27</td>
-                    <td><span class="badge bg-warning">Pending</span></td>
-                    <td>$280</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>#BK003</td>
-                    <td>Mike Johnson</td>
-                    <td>BMW X5</td>
-                    <td>2025-07-26</td>
-                    <td><span class="badge bg-success">Active</span></td>
-                    <td>$750</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>#BK004</td>
-                    <td>Sarah Wilson</td>
-                    <td>Audi A4</td>
-                    <td>2025-07-25</td>
-                    <td><span class="badge bg-danger">Cancelled</span></td>
-                    <td>$420</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
+                @forelse ($recentBookings as $booking)
+                    <tr>
+                        <td>BOOK-{{ str_pad($booking->id, 5, '0', STR_PAD_LEFT) }}</td>
+                        <td>{{ $booking->pelanggan->nama }}</td>
+                        <td>{{ $booking->mobil->merk }} {{ $booking->mobil->tipe }}</td>
+                        <td>{{ $booking->tanggal_sewa }}</td>
+                        <td>
+                            <span class="badge {{ $booking->status == 'Disewa' ? 'bg-success' : 'bg-secondary' }}">
+                                {{ $booking->status }}
+                            </span>
+                        </td>
+                        <td>Rp {{ number_format($booking->total_biaya, 0, ',', '.') }}</td>
+                        <td>
+                            <a href="{{ route('admin.penyewaans.show', $booking->id) }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></a>
+                            <a href="{{ route('admin.penyewaans.edit', $booking->id) }}" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center">Tidak ada data penyewaan terbaru.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -160,44 +147,70 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Revenue Chart
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(revenueCtx, {
-            type: 'line',
-            data: {
-                labels: @json($revenueLabels),
-                datasets: [{
-                    label: 'Revenue',
-                    data: @json($revenueData),
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    fill: true,
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
+        let revenueChart;
+
+        const updateRevenueChart = (period = '12_months') => {
+            fetch(`{{ route('admin.dashboard.revenue_chart') }}?period=${period}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (revenueChart) {
+                        revenueChart.destroy();
                     }
-                }
-            }
+                    revenueChart = new Chart(revenueCtx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Revenue',
+                                data: data.data,
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                fill: true,
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+        };
+
+        // Initial chart load
+        updateRevenueChart();
+
+        // Dropdown event listener
+        document.querySelectorAll('#revenuePeriodDropdown + .dropdown-menu a').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const period = this.dataset.period;
+                document.getElementById('revenuePeriodDropdown').textContent = this.textContent;
+                updateRevenueChart(period);
+            });
         });
 
         // Car Status Chart
-        const statusCtx = document.getElementById('statusChart').getContext('2d');
-        new Chart(statusCtx, {
+        const statusCanvas = document.getElementById('statusChart');
+        const statusLabels = JSON.parse(statusCanvas.dataset.labels);
+        const statusData = JSON.parse(statusCanvas.dataset.data);
+
+        new Chart(statusCanvas.getContext('2d'), {
             type: 'pie',
             data: {
-                labels: @json($labels),
+                labels: statusLabels,
                 datasets: [{
                     label: 'Status Mobil',
-                    data: @json($data),
+                    data: statusData,
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.8)', // Example color for 'Tersedia'
-                        'rgba(255, 159, 64, 0.8)', // Example color for 'Disewa'
-                        'rgba(255, 99, 132, 0.8)', // Example color for 'Perawatan'
-                        // Add more colors if there are more statuses
+                        'rgba(75, 192, 192, 0.8)', // Tersedia
+                        'rgba(255, 159, 64, 0.8)', // Disewa
+                        'rgba(255, 99, 132, 0.8)',  // Perawatan
                     ],
                     hoverOffset: 4
                 }]

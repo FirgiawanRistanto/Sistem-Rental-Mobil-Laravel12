@@ -33,3 +33,17 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr(".flatpickr", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d F Y",
+            locale: "id",
+            disableMobile: true,
+        });
+    });
+</script>
+@endpush

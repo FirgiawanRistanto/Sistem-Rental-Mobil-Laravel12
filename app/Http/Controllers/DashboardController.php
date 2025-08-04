@@ -83,7 +83,90 @@ class DashboardController extends Controller
         Log::info('Monthly Revenue from DB:', $monthlyRevenue->toArray());
         Log::info('Final Revenue Data for Chart:', ['labels' => $revenueLabels, 'data' => $revenueData]);
 
-        return view('admin.dashboard', compact('totalMobil', 'penyewaanAktif', 'totalPelanggan', 'labels', 'data', 'mobilPerawatan', 'revenueLabels', 'revenueData'));
+        $recentBookings = Penyewaan::with(['mobil', 'pelanggan'])
+                                 ->latest()
+                                 ->take(5)
+                                 ->get();
+
+        return view('admin.dashboard', compact('totalMobil', 'penyewaanAktif', 'totalPelanggan', 'labels', 'data', 'mobilPerawatan', 'revenueLabels', 'revenueData', 'recentBookings'));
+    }
+
+    public function getRevenueChartData(Request $request)
+    {
+        $period = $request->input('period', '12_months'); // Default to 12 months
+
+        $query = Penyewaan::select(
+            DB::raw('DATE_FORMAT(tanggal_sewa, "%Y-%m") as month'),
+            DB::raw('SUM(total_biaya + COALESCE(denda, 0)) as total_revenue')
+        )->groupBy('month')->orderBy('month');
+
+        $months = [];
+        $endDate = now()->endOfMonth();
+
+        switch ($period) {
+            case 'year_to_date':
+                $startDate = now()->startOfYear();
+                for ($i = 0; $i < now()->month; $i++) {
+                    $date = now()->startOfYear()->addMonths($i);
+                    $months[$date->format('Y-m')] = $date->format('M Y');
+                }
+                break;
+            case '30_days':
+                $startDate = now()->subDays(29)->startOfDay();
+                $query = Penyewaan::select(
+                    DB::raw('DATE_FORMAT(tanggal_sewa, "%Y-%m-%d") as day'),
+                    DB::raw('SUM(total_biaya + COALESCE(denda, 0)) as total_revenue')
+                )->groupBy('day')->orderBy('day');
+                for ($i = 29; $i >= 0; $i--) {
+                    $date = now()->subDays($i);
+                    $months[$date->format('Y-m-d')] = $date->format('d M');
+                }
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();
+                $daysInMonth = $startDate->daysInMonth;
+                $query = Penyewaan::select(
+                    DB::raw('DATE_FORMAT(tanggal_sewa, "%Y-%m-%d") as day'),
+                    DB::raw('SUM(total_biaya + COALESCE(denda, 0)) as total_revenue')
+                )->groupBy('day')->orderBy('day');
+                for ($i = 0; $i < $daysInMonth; $i++) {
+                    $date = $startDate->copy()->addDays($i);
+                    $months[$date->format('Y-m-d')] = $date->format('d M');
+                }
+                break;
+            case '12_months':
+            default:
+                $startDate = now()->subMonths(11)->startOfMonth();
+                for ($i = 11; $i >= 0; $i--) {
+                    $date = now()->startOfMonth()->subMonths($i);
+                    $months[$date->format('Y-m')] = $date->format('M Y');
+                }
+                break;
+        }
+
+        $monthlyRevenue = $query->whereBetween('tanggal_sewa', [$startDate, $endDate])->get();
+
+        $revenueLabels = [];
+        $revenueData = [];
+
+        foreach ($months as $key => $monthLabel) {
+            $revenueLabels[] = $monthLabel;
+            $found = false;
+            foreach ($monthlyRevenue as $revenue) {
+                $dateKey = $period === '30_days' || $period === 'last_month' ? $revenue->day : $revenue->month;
+                if ($dateKey == $key) {
+                    $revenueData[] = (float) $revenue->total_revenue;
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $revenueData[] = 0;
+            }
+        }
+
+        return response()->json(['labels' => $revenueLabels, 'data' => $revenueData]);
     }
 
     public function report(Request $request)

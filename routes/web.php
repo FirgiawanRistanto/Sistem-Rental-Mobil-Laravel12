@@ -31,12 +31,13 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 // Admin Routes
 Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard/revenue-chart', [DashboardController::class, 'getRevenueChartData'])->name('dashboard.revenue_chart');
 
     // Mobil Routes
     Route::resource('mobils', MobilController::class);
 
     // Pelanggan Routes
-    Route::resource('pelanggans', PelangganController::class)->only(['index', 'show']);
+    Route::resource('pelanggans', PelangganController::class)->except(['create', 'store', 'destroy']);
 
     // Penyewaan Routes
     Route::resource('penyewaans', PenyewaanController::class);
