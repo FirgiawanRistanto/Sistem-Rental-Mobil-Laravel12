@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class PelangganController extends Controller
 {
@@ -12,8 +13,22 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $pelanggans = Pelanggan::all();
-        return view('admin.pelanggans.index', compact('pelanggans'));
+        return view('admin.pelanggans.index');
+    }
+
+    public function getPelanggansData()
+    {
+        $pelanggans = Pelanggan::select('pelanggans.*');
+
+        return DataTables::of($pelanggans)
+            ->addColumn('action', function ($pelanggan) {
+                $showUrl = route('admin.pelanggans.show', $pelanggan->id);
+                $editUrl = route('admin.pelanggans.edit', $pelanggan->id);
+                return '<a href="' . $showUrl . '" class="btn btn-info btn-sm">Lihat</a> ' . 
+                       '<a href="' . $editUrl . '" class="btn btn-warning btn-sm">Edit</a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
@@ -21,6 +36,7 @@ class PelangganController extends Controller
      */
     public function show(Pelanggan $pelanggan)
     {
+        $pelanggan->load('penyewaans.mobil');
         return view('admin.pelanggans.show', compact('pelanggan'));
     }
 
@@ -41,5 +57,23 @@ class PelangganController extends Controller
         $pelanggan->update($request->all());
 
         return redirect()->route('admin.pelanggans.index')->with('success', 'Data pelanggan berhasil diperbarui.');
+    }
+
+    public function storeAjax(Request $request)
+    {
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'nama' => 'required|string|max:255',
+            'no_ktp' => 'required|string|max:16|unique:pelanggans,no_ktp',
+            'no_hp' => 'required|string|max:13',
+            'alamat' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $pelanggan = Pelanggan::create($request->all());
+
+        return response()->json($pelanggan, 201);
     }
 }

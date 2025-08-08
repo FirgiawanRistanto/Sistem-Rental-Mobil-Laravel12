@@ -12,4 +12,38 @@
         <a href="{{ route('admin.pelanggans.index') }}" class="btn btn-secondary">Kembali</a>
     </div>
 </div>
+
+<div class="card mt-4">
+    <div class="card-header">Riwayat Penyewaan Mobil</div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Mobil</th>
+                    <th>Tanggal Sewa</th>
+                    <th>Tanggal Kembali</th>
+                    <th>Total Biaya</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($pelanggan->penyewaans as $penyewaan)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $penyewaan->mobil->merk }} {{ $penyewaan->mobil->tipe }}</td>
+                        <td>{{ $penyewaan->tanggal_sewa->format('d-m-Y') }}</td>
+                        <td>{{ $penyewaan->tanggal_kembali->format('d-m-Y') }}</td>
+                        <td>Rp {{ number_format($penyewaan->total_biaya, 0, ',', '.') }}</td>
+                        <td>{{ $penyewaan->status }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center">Tidak ada riwayat penyewaan.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

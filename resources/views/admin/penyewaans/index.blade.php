@@ -8,7 +8,7 @@
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="penyewaanTable">
             <thead>
                 <tr>
                     <th>Booking ID</th>
@@ -22,23 +22,36 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($penyewaans as $penyewaan)
-                <tr>
-                    <td>BOOK-{{ str_pad($penyewaan->id, 5, '0', STR_PAD_LEFT) }}</td>
-                    <td>{{ $penyewaan->mobil->merk }} ({{ $penyewaan->mobil->nopol }})</td>
-                    <td>{{ $penyewaan->pelanggan->nama }}</td>
-                    <td>{{ $penyewaan->tanggal_sewa->translatedFormat('d F Y') }}</td>
-                    <td>{{ $penyewaan->tanggal_kembali->translatedFormat('d F Y') }}</td>
-                    <td>Rp {{ number_format($penyewaan->total_biaya, 0, ',', '.') }}</td>
-                    <td>{{ $penyewaan->status }}</td>
-                    <td>
-                        <a href="{{ route('admin.penyewaans.show', $penyewaan->id) }}" class="btn btn-info btn-sm">Lihat</a>
-                        <a href="{{ route('admin.penyewaans.edit', $penyewaan->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    </td>
-                </tr>
-                @endforeach
+                {{-- Data akan diisi oleh DataTables --}}
             </tbody>
         </table>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#penyewaanTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route("admin.penyewaans.data") }}',
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'mobil.merk', name: 'mobil.merk' },
+                { data: 'pelanggan.nama', name: 'pelanggan.nama' },
+                { data: 'tanggal_sewa', name: 'tanggal_sewa' },
+                { data: 'tanggal_kembali', name: 'tanggal_kembali' },
+                { data: 'total_biaya', name: 'total_biaya' },
+                { data: 'status', name: 'status' },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
+            ],
+            order: [[ 3, 'desc' ]], // Default order by tanggal_sewa
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
+                processing: 'Memuat data...'
+            }
+        });
+    });
+</script>
+@endpush

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Perawatan;
 use App\Models\Mobil;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PerawatanController extends Controller
 {
@@ -20,9 +21,21 @@ class PerawatanController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $mobils = Mobil::where('status', 'tersedia')->get();
+
+        // Jika ada mobil_id di request, tambahkan mobil tersebut ke daftar
+        if ($request->has('mobil_id')) {
+            $mobilFromNotification = Mobil::find($request->mobil_id);
+            if ($mobilFromNotification && !$mobils->contains('id', $mobilFromNotification->id)) {
+                $mobils->push($mobilFromNotification);
+            }
+        }
+
+        // Urutkan koleksi berdasarkan merk atau nopol agar lebih rapi
+        $mobils = $mobils->sortBy('merk');
+
         return view('admin.perawatans.create', compact('mobils'));
     }
 
@@ -110,6 +123,13 @@ class PerawatanController extends Controller
 
         $mobil = $perawatan->mobil;
         $mobil->status = 'tersedia';
+
+        // Hitung jadwal perawatan berikutnya
+        if ($mobil->periode_perawatan_hari) {
+            $tanggalSelesai = Carbon::parse($perawatan->tanggal_selesai);
+            $mobil->jadwal_perawatan_berikutnya = $tanggalSelesai->addDays($mobil->periode_perawatan_hari)->toDateString();
+        }
+
         $mobil->save();
 
         return redirect()->route('admin.perawatans.index')->with('success', 'Perawatan berhasil diselesaikan.');

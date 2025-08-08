@@ -14,8 +14,14 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('read')) {
+            $notification = $request->user()->notifications()->where('id', $request->read)->first();
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
         $totalMobil = Mobil::count();
         $penyewaanAktif = Penyewaan::where('status', 'Disewa')->count();
         $totalPelanggan = Pelanggan::count();

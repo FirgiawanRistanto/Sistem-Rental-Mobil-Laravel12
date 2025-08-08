@@ -7,6 +7,10 @@ use App\Http\Controllers\MobilController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PenyewaanController;
 use App\Http\Controllers\PerawatanController;
+use App\Http\Controllers\NotifController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,10 +41,13 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
     Route::resource('mobils', MobilController::class);
 
     // Pelanggan Routes
+    Route::post('pelanggans/store-ajax', [PelangganController::class, 'storeAjax'])->name('pelanggans.storeAjax');
     Route::resource('pelanggans', PelangganController::class)->except(['create', 'store', 'destroy']);
+    Route::get('pelanggans-data', [PelangganController::class, 'getPelanggansData'])->name('pelanggans.data');
 
     // Penyewaan Routes
     Route::resource('penyewaans', PenyewaanController::class);
+    Route::get('penyewaans-data', [PenyewaanController::class, 'getPenyewaansData'])->name('penyewaans.data');
 
     // Perawatan Routes
     Route::get('perawatans/{perawatan}/complete', [PerawatanController::class, 'showCompleteForm'])->name('perawatans.completeForm');
@@ -54,4 +61,22 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
     // Report Routes
     Route::get('reports/monthly', [DashboardController::class, 'report'])->name('dashboard.report');
     Route::get('reports/export', [DashboardController::class, 'export'])->name('reports.export');
+
+    // Notification Routes
+    Route::post('notifications/{notification}/mark-as-read', [NotifController::class, 'markAsRead'])->name('notifications.markAsRead');
 });
+
+// Temporary route for testing notification URL
+Route::get('/test-notification', function() {
+    Log::info('Test notification route hit!');
+    $mobil = App\Models\Mobil::first(); // Ambil mobil pertama untuk pengujian
+    if ($mobil) {
+        $user = App\Models\User::first(); // Ambil user pertama untuk pengujian
+        if ($user) {
+            $user->notify(new App\Notifications\MaintenanceReminder($mobil));
+            return 'Notifikasi terkirim. Cek database.';
+        }
+        return 'Tidak ada user ditemukan.';
+    }
+    return 'Tidak ada mobil ditemukan.';
+})->name('test.notification');

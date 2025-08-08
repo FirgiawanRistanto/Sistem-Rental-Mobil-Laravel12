@@ -64,9 +64,10 @@
         // Initialize Flatpickr on all elements with the class 'flatpickr'
         flatpickr(".flatpickr", {
             wrap: true, // This is crucial for the input group setup
-            dateFormat: "Y-m-d",
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
             altInput: true,
-            altFormat: "d F Y",
+            altFormat: "d F Y H:i",
             locale: "id",
             disableMobile: true,
             onChange: function(selectedDates, dateStr, instance) {

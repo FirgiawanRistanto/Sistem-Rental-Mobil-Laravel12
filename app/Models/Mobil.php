@@ -13,6 +13,8 @@ class Mobil extends Model
         'harga_sewa',
         'status',
         'denda_per_hari',
+        'jadwal_perawatan_berikutnya',
+        'periode_perawatan_hari',
     ];
 
     public static function rules($id = null)
@@ -24,6 +26,8 @@ class Mobil extends Model
             'harga_sewa' => 'required|integer|min:0',
             'denda_per_hari' => 'required|integer|min:0',
             'status' => 'required|in:tersedia,disewa,perawatan',
+            'jadwal_perawatan_berikutnya' => 'nullable|date',
+            'periode_perawatan_hari' => 'nullable|integer|min:0',
         ];
     }
 

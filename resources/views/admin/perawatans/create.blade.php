@@ -11,7 +11,7 @@
                 <select class="form-select" id="mobil_id" name="mobil_id" required>
                     <option value="">-- Pilih Mobil --</option>
                     @foreach($mobils as $mobil)
-                        <option value="{{ $mobil->id }}">{{ $mobil->merk }} {{ $mobil->tipe }} ({{ $mobil->nopol }})</option>
+                        <option value="{{ $mobil->id }}" {{ request('mobil_id') == $mobil->id ? 'selected' : '' }}>{{ $mobil->merk }} {{ $mobil->tipe }} ({{ $mobil->nopol }})</option>
                     @endforeach
                 </select>
             </div>

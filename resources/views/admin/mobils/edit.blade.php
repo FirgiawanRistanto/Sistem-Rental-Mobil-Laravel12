@@ -30,14 +30,14 @@
             </div>
             <div class="mb-3">
                 <label for="harga_sewa" class="form-label">Harga Sewa per Hari:</label>
-                <input type="number" class="form-control" id="harga_sewa" name="harga_sewa" value="{{ $mobil->harga_sewa }}" required>
+                <input type="text" class="form-control" id="harga_sewa" name="harga_sewa" value="{{ $mobil->harga_sewa }}" required pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 @error('harga_sewa')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="denda_per_hari" class="form-label">Denda per Hari:</label>
-                <input type="number" class="form-control" id="denda_per_hari" name="denda_per_hari" value="{{ $mobil->denda_per_hari }}" required>
+                <input type="text" class="form-control" id="denda_per_hari" name="denda_per_hari" value="{{ $mobil->denda_per_hari }}" required pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 @error('denda_per_hari')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -53,9 +53,37 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="jadwal_perawatan_berikutnya" class="form-label">Jadwal Perawatan Berikutnya:</label>
+                <input type="text" class="form-control flatpickr" id="jadwal_perawatan_berikutnya" name="jadwal_perawatan_berikutnya" value="{{ old('jadwal_perawatan_berikutnya', $mobil->jadwal_perawatan_berikutnya) }}">
+                @error('jadwal_perawatan_berikutnya')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="periode_perawatan_hari" class="form-label">Periode Perawatan (hari):</label>
+                <input type="number" class="form-control" id="periode_perawatan_hari" name="periode_perawatan_hari" value="{{ old('periode_perawatan_hari', $mobil->periode_perawatan_hari) }}" min="0">
+                @error('periode_perawatan_hari')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
             <button type="submit" class="btn btn-primary">Update</button>
             <a href="{{ route('admin.mobils.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr("#jadwal_perawatan_berikutnya", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d F Y",
+            locale: "id",
+            disableMobile: true,
+        });
+    });
+</script>
+@endpush

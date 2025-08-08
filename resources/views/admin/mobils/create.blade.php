@@ -8,35 +8,35 @@
             @csrf
             <div class="mb-3">
                 <label for="merk" class="form-label">Merk:</label>
-                <input type="text" class="form-control" id="merk" name="merk" required>
+                <input type="text" class="form-control" id="merk" name="merk" required oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '').replace(/\b\w/g, l => l.toUpperCase())">
                 @error('merk')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="tipe" class="form-label">Tipe:</label>
-                <input type="text" class="form-control" id="tipe" name="tipe" required>
+                <input type="text" class="form-control" id="tipe" name="tipe" required oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
                 @error('tipe')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="nopol" class="form-label">Nomor Polisi:</label>
-                <input type="text" class="form-control" id="nopol" name="nopol" required>
+                <input type="text" class="form-control" id="nopol" name="nopol" required oninput="this.value = this.value.toUpperCase()" maxlength="11">
                 @error('nopol')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="harga_sewa" class="form-label">Harga Sewa per Hari:</label>
-                <input type="number" class="form-control" id="harga_sewa" name="harga_sewa" required min="0" oninput="this.value = Math.abs(this.value)">
+                <input type="text" class="form-control" id="harga_sewa" name="harga_sewa" value="0" required pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 @error('harga_sewa')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="denda_per_hari" class="form-label">Denda per Hari:</label>
-                <input type="number" class="form-control" id="denda_per_hari" name="denda_per_hari" value="0" required min="0" oninput="this.value = Math.abs(this.value)">
+                <input type="text" class="form-control" id="denda_per_hari" name="denda_per_hari" value="0" required pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 @error('denda_per_hari')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -52,9 +52,37 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="jadwal_perawatan_berikutnya" class="form-label">Jadwal Perawatan Berikutnya:</label>
+                <input type="text" class="form-control flatpickr" id="jadwal_perawatan_berikutnya" name="jadwal_perawatan_berikutnya">
+                @error('jadwal_perawatan_berikutnya')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="periode_perawatan_hari" class="form-label">Periode Perawatan (hari):</label>
+                <input type="number" class="form-control" id="periode_perawatan_hari" name="periode_perawatan_hari" min="0">
+                @error('periode_perawatan_hari')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
             <a href="{{ route('admin.mobils.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr("#jadwal_perawatan_berikutnya", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d F Y",
+            locale: "id",
+            disableMobile: true,
+        });
+    });
+</script>
+@endpush

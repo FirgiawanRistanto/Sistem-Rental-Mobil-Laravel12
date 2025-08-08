@@ -19,8 +19,10 @@
 <body>
     <div id="app">
         <main class="py-4">
+            <link rel="stylesheet" href="{{ asset('assets/css/auth.css') }}">
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('assets/js/auth.js') }}"></script>
 </body>
 </html>

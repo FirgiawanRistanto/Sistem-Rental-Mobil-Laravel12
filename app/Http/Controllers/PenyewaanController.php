@@ -6,6 +6,7 @@ use App\Models\Penyewaan;
 use App\Models\Mobil;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class PenyewaanController extends Controller
 {
@@ -14,8 +15,37 @@ class PenyewaanController extends Controller
      */
     public function index()
     {
-        $penyewaans = Penyewaan::orderBy('tanggal_sewa', 'desc')->get();
-        return view('admin.penyewaans.index', compact('penyewaans'));
+        return view('admin.penyewaans.index');
+    }
+
+    public function getPenyewaansData()
+    {
+        $penyewaans = Penyewaan::with(['mobil', 'pelanggan'])->select('penyewaans.*');
+
+        return DataTables::of($penyewaans)
+            ->addColumn('action', function ($penyewaan) {
+                $showUrl = route('admin.penyewaans.show', $penyewaan->id);
+                $editUrl = route('admin.penyewaans.edit', $penyewaan->id);
+                return '<a href="' . $showUrl . '" class="btn btn-info btn-sm">Lihat</a> ' . 
+                       '<a href="' . $editUrl . '" class="btn btn-warning btn-sm">Edit</a>';
+            })
+            ->editColumn('id', function ($penyewaan) {
+                return 'BOOK-' . str_pad($penyewaan->id, 5, '0', STR_PAD_LEFT);
+            })
+            ->editColumn('mobil.merk', function ($penyewaan) {
+                return $penyewaan->mobil->merk . ' (' . $penyewaan->mobil->nopol . ')';
+            })
+            ->editColumn('total_biaya', function ($penyewaan) {
+                return 'Rp ' . number_format($penyewaan->total_biaya, 0, ',', '.');
+            })
+            ->editColumn('tanggal_sewa', function ($penyewaan) {
+                return $penyewaan->tanggal_sewa->translatedFormat('d F Y');
+            })
+            ->editColumn('tanggal_kembali', function ($penyewaan) {
+                return $penyewaan->tanggal_kembali->translatedFormat('d F Y');
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
@@ -24,7 +54,8 @@ class PenyewaanController extends Controller
     public function create()
     {
         $mobils = Mobil::where('status', 'Tersedia')->get();
-        return view('admin.penyewaans.create', compact('mobils'));
+        $pelanggans = Pelanggan::all();
+        return view('admin.penyewaans.create', compact('mobils', 'pelanggans'));
     }
 
     /**
@@ -35,31 +66,7 @@ class PenyewaanController extends Controller
         $rules = \App\Models\Penyewaan::rules();
         $messages = \App\Models\Penyewaan::messages();
 
-        // Add customer-related rules
-        $rules['nama'] = 'required|string|max:255';
-        $rules['no_ktp'] = 'required|string|max:16|unique:pelanggans,no_ktp';
-        $rules['no_hp'] = 'required|string|max:13';
-        $rules['alamat'] = 'required|string';
-
-        // Add customer-related messages
-        $messages['nama.required'] = 'Nama pelanggan wajib diisi.';
-        $messages['nama.string'] = 'Nama pelanggan harus berupa teks.';
-        $messages['nama.max'] = 'Nama pelanggan tidak boleh lebih dari 255 karakter.';
-        $messages['no_ktp.required'] = 'Nomor KTP/SIM wajib diisi.';
-        $messages['no_ktp.string'] = 'Nomor KTP/SIM harus berupa teks.';
-        $messages['no_ktp.max'] = 'Nomor KTP/SIM tidak boleh lebih dari 16 karakter.';
-        $messages['no_ktp.unique'] = 'Nomor KTP/SIM sudah terdaftar.';
-        $messages['no_hp.required'] = 'Nomor HP wajib diisi.';
-        $messages['no_hp.string'] = 'Nomor HP harus berupa teks.';
-        $messages['no_hp.max'] = 'Nomor HP tidak boleh lebih dari 13 karakter.';
-        $messages['alamat.required'] = 'Alamat wajib diisi.';
-        $messages['alamat.string'] = 'Alamat harus berupa teks.';
-
-        // Remove 'pelanggan_id' and 'denda' from Penyewaan rules as they are not directly from request for store
-        unset($rules['pelanggan_id']);
-        unset($rules['denda']);
-        unset($rules['tanggal_kembali_aktual']); // Not needed for store
-
+        // Validate the request
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
@@ -68,24 +75,7 @@ class PenyewaanController extends Controller
                         ->withInput();
         }
 
-        // Find or create customer
-        $pelanggan = Pelanggan::firstOrCreate(
-            ['no_ktp' => $request->no_ktp],
-            [
-                'nama' => $request->nama,
-                'no_hp' => $request->no_hp,
-                'alamat' => $request->alamat,
-            ]
-        );
-
-        $penyewaan = Penyewaan::create([
-            'mobil_id' => $request->mobil_id,
-            'pelanggan_id' => $pelanggan->id,
-            'tanggal_sewa' => $request->tanggal_sewa,
-            'tanggal_kembali' => $request->tanggal_kembali,
-            'total_biaya' => $request->total_biaya,
-            'status' => $request->status,
-        ]);
+        $penyewaan = Penyewaan::create($request->all());
 
         // Update mobil status to 'Disewa'
         $mobil = Mobil::find($request->mobil_id);

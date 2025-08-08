@@ -38,7 +38,7 @@
 
             <div class="mb-3">
                 <label for="tanggal_sewa" class="form-label">Tanggal Sewa</label>
-                <input type="text" name="tanggal_sewa" id="tanggal_sewa" class="form-control flatpickr" value="{{ $penyewaan->tanggal_sewa->format('Y-m-d') }}">
+                <input type="text" name="tanggal_sewa" id="tanggal_sewa" class="form-control flatpickr" value="{{ $penyewaan->tanggal_sewa->format('Y-m-d H:i') }}">
                 @error('tanggal_sewa')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -46,7 +46,7 @@
 
             <div class="mb-3">
                 <label for="tanggal_kembali" class="form-label">Tanggal Kembali</label>
-                <input type="text" name="tanggal_kembali" id="tanggal_kembali" class="form-control flatpickr" value="{{ $penyewaan->tanggal_kembali->format('Y-m-d') }}">
+                <input type="text" name="tanggal_kembali" id="tanggal_kembali" class="form-control flatpickr" value="{{ $penyewaan->tanggal_kembali->format('Y-m-d H:i') }}">
                 @error('tanggal_kembali')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -82,9 +82,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         flatpickr(".flatpickr", {
-            dateFormat: "Y-m-d",
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
             altInput: true,
-            altFormat: "d F Y",
+            altFormat: "d F Y H:i",
             locale: "id",
             disableMobile: true,
         });

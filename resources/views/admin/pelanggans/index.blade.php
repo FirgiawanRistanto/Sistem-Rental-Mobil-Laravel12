@@ -7,7 +7,7 @@
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="pelangganTable">
             <thead>
                 <tr>
                     <th>Nama</th>
@@ -18,20 +18,32 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($pelanggans as $pelanggan)
-                <tr>
-                    <td>{{ $pelanggan->nama }}</td>
-                    <td>{{ $pelanggan->no_ktp }}</td>
-                    <td>{{ $pelanggan->no_hp }}</td>
-                    <td>{{ $pelanggan->alamat }}</td>
-                    <td>
-                        <a href="{{ route('admin.pelanggans.show', $pelanggan->id) }}" class="btn btn-info btn-sm">Lihat</a>
-                        <a href="{{ route('admin.pelanggans.edit', $pelanggan->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    </td>
-                </tr>
-                @endforeach
+                {{-- Data akan diisi oleh DataTables --}}
             </tbody>
         </table>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#pelangganTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route("admin.pelanggans.data") }}',
+            columns: [
+                { data: 'nama', name: 'nama' },
+                { data: 'no_ktp', name: 'no_ktp' },
+                { data: 'no_hp', name: 'no_hp' },
+                { data: 'alamat', name: 'alamat' },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
+            ],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
+                processing: 'Memuat data...'
+            }
+        });
+    });
+</script>
+@endpush
