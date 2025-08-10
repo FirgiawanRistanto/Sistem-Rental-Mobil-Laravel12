@@ -14,16 +14,14 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/sass/app.scss', 'resources/js/app.js']); ?>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/auth.css', 'resources/js/auth.js']); ?>
 </head>
 <body>
     <div id="app">
         <main class="py-4">
-            <link rel="stylesheet" href="<?php echo e(asset('assets/css/auth.css')); ?>">
             <?php echo $__env->yieldContent('content'); ?>
         </main>
     </div>
-    <script src="<?php echo e(asset('assets/js/auth.js')); ?>"></script>
 </body>
 </html>
 <?php /**PATH D:\Kuliah\xampp8\htdocs\rentalMobil\resources\views/layouts/auth.blade.php ENDPATH**/ ?>
