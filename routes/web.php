@@ -39,6 +39,8 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
 
     // Mobil Routes
     Route::resource('mobils', MobilController::class);
+    Route::delete('mobils/gambar/{mobilGambar}', [MobilController::class, 'deleteGambar'])->name('mobils.deleteGambar');
+    Route::put('mobils/gambar/reorder', [MobilController::class, 'reorderGambar'])->name('mobils.reorderGambar');
 
     // Pelanggan Routes
     Route::post('pelanggans/store-ajax', [PelangganController::class, 'storeAjax'])->name('pelanggans.storeAjax');

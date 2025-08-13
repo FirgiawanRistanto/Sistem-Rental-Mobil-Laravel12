@@ -14,5 +14,57 @@
         <a href="<?php echo e(route('admin.mobils.index')); ?>" class="btn btn-secondary">Kembali</a>
     </div>
 </div>
+
+<div class="card mt-4">
+    <div class="card-header">Galeri Gambar</div>
+    <div class="card-body">
+        <ul class="nav nav-tabs" id="imageTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="exterior-tab" data-bs-toggle="tab" data-bs-target="#exterior" type="button" role="tab" aria-controls="exterior" aria-selected="true">Eksterior</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="interior-tab" data-bs-toggle="tab" data-bs-target="#interior" type="button" role="tab" aria-controls="interior" aria-selected="false">Interior</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="imageTabsContent">
+            <div class="tab-pane fade show active" id="exterior" role="tabpanel" aria-labelledby="exterior-tab">
+                <div class="row mt-3">
+                    <?php if(isset($gambars['exterior'])): ?>
+                        <?php $__currentLoopData = $gambars['exterior']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gambar): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <img src="<?php echo e(asset('storage/' . $gambar->path)); ?>" class="card-img-top" alt="<?php echo e($gambar->label); ?>">
+                                    <div class="card-body">
+                                        <p class="card-text"><?php echo e($gambar->label); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php else: ?>
+                        <p>Tidak ada gambar eksterior.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="interior" role="tabpanel" aria-labelledby="interior-tab">
+                <div class="row mt-3">
+                    <?php if(isset($gambars['interior'])): ?>
+                        <?php $__currentLoopData = $gambars['interior']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gambar): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <img src="<?php echo e(asset('storage/' . $gambar->path)); ?>" class="card-img-top" alt="<?php echo e($gambar->label); ?>">
+                                    <div class="card-body">
+                                        <p class="card-text"><?php echo e($gambar->label); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php else: ?>
+                        <p>Tidak ada gambar interior.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Kuliah\xampp8\htdocs\rentalMobil\resources\views/admin/mobils/show.blade.php ENDPATH**/ ?>

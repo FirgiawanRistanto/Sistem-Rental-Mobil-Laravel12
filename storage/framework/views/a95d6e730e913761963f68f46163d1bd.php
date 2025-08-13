@@ -14,7 +14,8 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/auth.css', 'resources/js/auth.js']); ?>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/js/app.js', 'resources/css/auth.css', 'resources/js/auth.js']); ?>
 </head>
 <body>
     <div id="app">

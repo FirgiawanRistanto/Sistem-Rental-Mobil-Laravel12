@@ -16,4 +16,56 @@
         <a href="{{ route('admin.mobils.index') }}" class="btn btn-secondary">Kembali</a>
     </div>
 </div>
+
+<div class="card mt-4">
+    <div class="card-header">Galeri Gambar</div>
+    <div class="card-body">
+        <ul class="nav nav-tabs" id="imageTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="exterior-tab" data-bs-toggle="tab" data-bs-target="#exterior" type="button" role="tab" aria-controls="exterior" aria-selected="true">Eksterior</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="interior-tab" data-bs-toggle="tab" data-bs-target="#interior" type="button" role="tab" aria-controls="interior" aria-selected="false">Interior</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="imageTabsContent">
+            <div class="tab-pane fade show active" id="exterior" role="tabpanel" aria-labelledby="exterior-tab">
+                <div class="row mt-3">
+                    @if(isset($gambars['exterior']))
+                        @foreach($gambars['exterior'] as $gambar)
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <img src="{{ asset('storage/' . $gambar->path) }}" class="card-img-top" alt="{{ $gambar->label }}">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ $gambar->label }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <p>Tidak ada gambar eksterior.</p>
+                    @endif
+                </div>
+            </div>
+            <div class="tab-pane fade" id="interior" role="tabpanel" aria-labelledby="interior-tab">
+                <div class="row mt-3">
+                    @if(isset($gambars['interior']))
+                        @foreach($gambars['interior'] as $gambar)
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <img src="{{ asset('storage/' . $gambar->path) }}" class="card-img-top" alt="{{ $gambar->label }}">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ $gambar->label }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <p>Tidak ada gambar interior.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

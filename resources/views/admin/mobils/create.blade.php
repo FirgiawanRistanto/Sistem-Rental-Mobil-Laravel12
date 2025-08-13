@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">Tambah Mobil Baru</div>
     <div class="card-body">
-        <form action="{{ route('admin.mobils.store') }}" method="POST">
+        <form action="{{ route('admin.mobils.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="merk" class="form-label">Merk:</label>
@@ -66,9 +66,35 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="mb-3">
+                <label for="exterior_images" class="form-label">Gambar Eksterior:</label>
+                <input type="file" class="form-control" id="exterior_images" name="exterior_images[]" multiple>
+                @error('exterior_images.*')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="exterior_labels" class="form-label">Label Gambar Eksterior (pisahkan dengan koma):</label>
+                <textarea class="form-control" id="exterior_labels" name="exterior_labels"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="interior_images" class="form-label">Gambar Interior:</label>
+                <input type="file" class="form-control" id="interior_images" name="interior_images[]" multiple>
+                @error('interior_images.*')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="interior_labels" class="form-label">Label Gambar Interior (pisahkan dengan koma):</label>
+                <textarea class="form-control" id="interior_labels" name="interior_labels"></textarea>
+            </div>
+
             <button type="submit" class="btn btn-primary">Simpan</button>
             <a href="{{ route('admin.mobils.index') }}" class="btn btn-secondary">Kembali</a>
-        </form>
     </div>
 </div>
 @endsection

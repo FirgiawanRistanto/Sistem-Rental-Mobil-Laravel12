@@ -64,4 +64,9 @@ class Mobil extends Model
     {
         return $this->hasMany(Perawatan::class);
     }
+
+    public function gambars()
+    {
+        return $this->hasMany(MobilGambar::class);
+    }
 }

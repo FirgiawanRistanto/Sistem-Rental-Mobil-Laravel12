@@ -2,7 +2,7 @@
 <div class="card">
     <div class="card-header">Edit Mobil</div>
     <div class="card-body">
-        <form action="<?php echo e(route('admin.mobils.update', $mobil->id)); ?>" method="POST">
+        <form action="<?php echo e(route('admin.mobils.update', $mobil->id)); ?>" method="POST" enctype="multipart/form-data">
             <?php echo csrf_field(); ?>
             <?php echo method_field('PUT'); ?>
             <div class="mb-3">
@@ -121,6 +121,68 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
             </div>
+
+            <div class="card mt-4">
+                <div class="card-header">Galeri Gambar</div>
+                <div class="card-body">
+                    <h5>Gambar Tersimpan</h5>
+                    <div class="row">
+                        <?php $__currentLoopData = $mobil->gambars; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gambar): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <img src="<?php echo e(asset('storage/' . $gambar->path)); ?>" class="card-img-top">
+                                    <div class="card-body">
+                                        <p class="card-text"><?php echo e($gambar->label); ?> (<?php echo e($gambar->tipe); ?>)</p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="deleted_images[]" value="<?php echo e($gambar->id); ?>">
+                                            <label class="form-check-label">Hapus</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                    <hr>
+                    <h5>Upload Gambar Baru</h5>
+                    <div class="mb-3">
+                        <label for="exterior_images" class="form-label">Gambar Eksterior:</label>
+                        <input type="file" class="form-control" id="exterior_images" name="exterior_images[]" multiple>
+                        <?php $__errorArgs = ['exterior_images.*'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="text-danger"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exterior_labels" class="form-label">Label Gambar Eksterior (pisahkan dengan koma):</label>
+                        <textarea class="form-control" id="exterior_labels" name="exterior_labels"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="interior_images" class="form-label">Gambar Interior:</label>
+                        <input type="file" class="form-control" id="interior_images" name="interior_images[]" multiple>
+                        <?php $__errorArgs = ['interior_images.*'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="text-danger"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+                    <div class="mb-3">
+                        <label for="interior_labels" class="form-label">Label Gambar Interior (pisahkan dengan koma):</label>
+                        <textarea class="form-control" id="interior_labels" name="interior_labels"></textarea>
+                    </div>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-primary">Update</button>
             <a href="<?php echo e(route('admin.mobils.index')); ?>" class="btn btn-secondary">Kembali</a>
         </form>
