@@ -102,6 +102,10 @@
                         <textarea class="form-control" id="exterior_labels" name="exterior_labels"></textarea>
                     </div>
                     <div class="mb-3">
+                        <label for="exterior_urutan" class="form-label">Urutan Gambar Eksterior (pisahkan dengan koma):</label>
+                        <textarea class="form-control" id="exterior_urutan" name="exterior_urutan"></textarea>
+                    </div>
+                    <div class="mb-3">
                         <label for="interior_images" class="form-label">Gambar Interior:</label>
                         <input type="file" class="form-control" id="interior_images" name="interior_images[]" multiple>
                         @error('interior_images.*')
@@ -111,6 +115,10 @@
                     <div class="mb-3">
                         <label for="interior_labels" class="form-label">Label Gambar Interior (pisahkan dengan koma):</label>
                         <textarea class="form-control" id="interior_labels" name="interior_labels"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="interior_urutan" class="form-label">Urutan Gambar Interior (pisahkan dengan koma):</label>
+                        <textarea class="form-control" id="interior_urutan" name="interior_urutan"></textarea>
                     </div>
                 </div>
             </div>

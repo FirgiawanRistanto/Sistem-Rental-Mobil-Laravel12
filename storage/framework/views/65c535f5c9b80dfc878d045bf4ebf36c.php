@@ -4,7 +4,7 @@
     <div class="card-body">
         <a href="<?php echo e(route('admin.mobils.create')); ?>" class="btn btn-primary mb-3">Tambah Mobil Baru</a>
         <?php if(session('success')): ?>
-            <div class="alert alert-success"><?php echo e(session('success')); ?></div>
+        <div class="alert alert-success"><?php echo e(session('success')); ?></div>
         <?php endif; ?>
         <table class="table table-bordered">
             <thead>
@@ -13,6 +13,7 @@
                     <th>Tipe</th>
                     <th>Nopol</th>
                     <th>Harga Sewa</th>
+                    <th>Disewa</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -24,15 +25,16 @@
                     <td><?php echo e($mobil->tipe); ?></td>
                     <td><?php echo e($mobil->nopol); ?></td>
                     <td>Rp <?php echo e(number_format($mobil->harga_sewa, 0, ',', '.')); ?></td>
+                    <td><?php echo e($mobil->disewa); ?> Kali</td>
                     <td>
                         <?php if($mobil->status == 'tersedia'): ?>
-                            <span class="badge bg-success">Tersedia</span>
+                        <span class="badge bg-success">Tersedia</span>
                         <?php elseif($mobil->status == 'disewa'): ?>
-                            <span class="badge bg-primary">Disewa</span>
+                        <span class="badge bg-primary">Disewa</span>
                         <?php elseif($mobil->status == 'perawatan'): ?>
-                            <span class="badge bg-danger">Perawatan</span>
+                        <span class="badge bg-danger">Perawatan</span>
                         <?php else: ?>
-                            <span class="badge bg-secondary"><?php echo e(ucfirst($mobil->status)); ?></span>
+                        <span class="badge bg-secondary"><?php echo e(ucfirst($mobil->status)); ?></span>
                         <?php endif; ?>
                     </td>
                     <td>

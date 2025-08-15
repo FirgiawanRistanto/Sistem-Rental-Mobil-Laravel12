@@ -81,6 +81,7 @@ class PenyewaanController extends Controller
         $mobil = Mobil::find($request->mobil_id);
         if ($mobil) {
             $mobil->status = 'Disewa';
+            $mobil->disewa = $mobil->disewa + 1; // Increment disewa count
             $mobil->save();
         }
 

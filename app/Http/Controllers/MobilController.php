@@ -32,6 +32,8 @@ class MobilController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), array_merge(\App\Models\Mobil::rules(), [
             'interior_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'exterior_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'interior_urutan.*' => 'nullable|integer|min:0',
+            'exterior_urutan.*' => 'nullable|integer|min:0',
         ]));
 
         if ($validator->fails()) {
@@ -44,6 +46,8 @@ class MobilController extends Controller
 
         $interior_labels = explode(',', $request->input('interior_labels'));
         $exterior_labels = explode(',', $request->input('exterior_labels'));
+        $interior_urutan = explode(',', $request->input('interior_urutan'));
+        $exterior_urutan = explode(',', $request->input('exterior_urutan'));
 
         if ($request->hasFile('interior_images')) {
             foreach ($request->file('interior_images') as $key => $image) {
@@ -51,7 +55,8 @@ class MobilController extends Controller
                 $mobil->gambars()->create([
                     'path' => $path,
                     'tipe' => 'interior',
-                    'label' => $interior_labels[$key] ?? ''
+                    'label' => $interior_labels[$key] ?? '',
+                    'urutan' => $interior_urutan[$key] ?? 0
                 ]);
             }
         }
@@ -62,7 +67,8 @@ class MobilController extends Controller
                 $mobil->gambars()->create([
                     'path' => $path,
                     'tipe' => 'exterior',
-                    'label' => $exterior_labels[$key] ?? ''
+                    'label' => $exterior_labels[$key] ?? '',
+                    'urutan' => $exterior_urutan[$key] ?? 0
                 ]);
             }
         }
@@ -75,7 +81,9 @@ class MobilController extends Controller
      */
     public function show(Mobil $mobil)
     {
-        $mobil->load('gambars');
+        $mobil->load(['gambars' => function($query) {
+            $query->orderBy('urutan');
+        }]);
         $gambars = $mobil->gambars->groupBy('tipe');
         return view('admin.mobils.show', compact('mobil', 'gambars'));
     }
@@ -96,6 +104,8 @@ class MobilController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), array_merge(\App\Models\Mobil::rules($mobil->id), [
             'interior_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'exterior_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'interior_urutan.*' => 'nullable|integer|min:0',
+            'exterior_urutan.*' => 'nullable|integer|min:0',
         ]));
 
         if ($validator->fails()) {
@@ -113,6 +123,8 @@ class MobilController extends Controller
 
         $interior_labels = explode(',', $request->input('interior_labels'));
         $exterior_labels = explode(',', $request->input('exterior_labels'));
+        $interior_urutan = explode(',', $request->input('interior_urutan'));
+        $exterior_urutan = explode(',', $request->input('exterior_urutan'));
 
         if ($request->hasFile('interior_images')) {
             foreach ($request->file('interior_images') as $key => $image) {
@@ -120,7 +132,8 @@ class MobilController extends Controller
                 $mobil->gambars()->create([
                     'path' => $path,
                     'tipe' => 'interior',
-                    'label' => $interior_labels[$key] ?? ''
+                    'label' => $interior_labels[$key] ?? '',
+                    'urutan' => $interior_urutan[$key] ?? 0
                 ]);
             }
         }
@@ -131,7 +144,8 @@ class MobilController extends Controller
                 $mobil->gambars()->create([
                     'path' => $path,
                     'tipe' => 'exterior',
-                    'label' => $exterior_labels[$key] ?? ''
+                    'label' => $exterior_labels[$key] ?? '',
+                    'urutan' => $exterior_urutan[$key] ?? 0
                 ]);
             }
         }

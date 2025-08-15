@@ -8,6 +8,7 @@
         <p><strong>Harga Sewa per Hari:</strong> <?php echo e($mobil->harga_sewa); ?></p>
         <p><strong>Denda per Hari:</strong> <?php echo e($mobil->denda_per_hari); ?></p>
         <p><strong>Status:</strong> <?php echo e($mobil->status); ?></p>
+        <p><strong>Disewa Berapa Kali:</strong> <?php echo e($mobil->disewa); ?></p>
         <p><strong>Jadwal Perawatan Berikutnya:</strong> <?php echo e($mobil->jadwal_perawatan_berikutnya ? \Carbon\Carbon::parse($mobil->jadwal_perawatan_berikutnya)->format('d F Y') : '-'); ?></p>
         <p><strong>Periode Perawatan:</strong> <?php echo e($mobil->periode_perawatan_hari ? $mobil->periode_perawatan_hari . ' hari' : '-'); ?></p>
         <a href="<?php echo e(route('admin.mobils.edit', $mobil->id)); ?>" class="btn btn-warning">Edit Mobil</a>

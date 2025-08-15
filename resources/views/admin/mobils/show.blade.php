@@ -10,6 +10,7 @@
         <p><strong>Harga Sewa per Hari:</strong> {{ $mobil->harga_sewa }}</p>
         <p><strong>Denda per Hari:</strong> {{ $mobil->denda_per_hari }}</p>
         <p><strong>Status:</strong> {{ $mobil->status }}</p>
+        <p><strong>Disewa Berapa Kali:</strong> {{ $mobil->disewa }}</p>
         <p><strong>Jadwal Perawatan Berikutnya:</strong> {{ $mobil->jadwal_perawatan_berikutnya ? \Carbon\Carbon::parse($mobil->jadwal_perawatan_berikutnya)->format('d F Y') : '-' }}</p>
         <p><strong>Periode Perawatan:</strong> {{ $mobil->periode_perawatan_hari ? $mobil->periode_perawatan_hari . ' hari' : '-' }}</p>
         <a href="{{ route('admin.mobils.edit', $mobil->id) }}" class="btn btn-warning">Edit Mobil</a>

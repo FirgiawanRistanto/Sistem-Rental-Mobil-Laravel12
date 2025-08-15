@@ -15,6 +15,7 @@ class Mobil extends Model
         'denda_per_hari',
         'jadwal_perawatan_berikutnya',
         'periode_perawatan_hari',
+        'disewa',
     ];
 
     public static function rules($id = null)

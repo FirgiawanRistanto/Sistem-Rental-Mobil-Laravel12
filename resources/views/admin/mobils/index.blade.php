@@ -6,7 +6,7 @@
     <div class="card-body">
         <a href="{{ route('admin.mobils.create') }}" class="btn btn-primary mb-3">Tambah Mobil Baru</a>
         @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success">{{ session('success') }}</div>
         @endif
         <table class="table table-bordered">
             <thead>
@@ -15,6 +15,7 @@
                     <th>Tipe</th>
                     <th>Nopol</th>
                     <th>Harga Sewa</th>
+                    <th>Disewa</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -26,15 +27,16 @@
                     <td>{{ $mobil->tipe }}</td>
                     <td>{{ $mobil->nopol }}</td>
                     <td>Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }}</td>
+                    <td>{{ $mobil->disewa }} Kali</td>
                     <td>
                         @if($mobil->status == 'tersedia')
-                            <span class="badge bg-success">Tersedia</span>
+                        <span class="badge bg-success">Tersedia</span>
                         @elseif($mobil->status == 'disewa')
-                            <span class="badge bg-primary">Disewa</span>
+                        <span class="badge bg-primary">Disewa</span>
                         @elseif($mobil->status == 'perawatan')
-                            <span class="badge bg-danger">Perawatan</span>
+                        <span class="badge bg-danger">Perawatan</span>
                         @else
-                            <span class="badge bg-secondary">{{ ucfirst($mobil->status) }}</span>
+                        <span class="badge bg-secondary">{{ ucfirst($mobil->status) }}</span>
                         @endif
                     </td>
                     <td>

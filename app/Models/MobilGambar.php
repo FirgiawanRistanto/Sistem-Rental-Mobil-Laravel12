@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MobilGambar extends Model
 {
-    protected $fillable = ['mobil_id', 'path', 'tipe', 'label'];
+    protected $fillable = ['mobil_id', 'path', 'tipe', 'label', 'urutan'];
 
     public function mobil()
     {
