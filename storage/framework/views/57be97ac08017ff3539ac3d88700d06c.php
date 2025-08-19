@@ -127,12 +127,30 @@ unset($__errorArgs, $__bag); ?>
                 <div class="card-body">
                     <h5>Gambar Tersimpan</h5>
                     <div class="row">
-                        <?php $__currentLoopData = $mobil->gambars; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gambar): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <h5>Eksterior</h5>
+                        <?php $__currentLoopData = $mobil->gambars->where('tipe', 'exterior')->sortBy('urutan'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gambar): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-md-3">
                                 <div class="card">
                                     <img src="<?php echo e(asset('storage/' . $gambar->path)); ?>" class="card-img-top">
                                     <div class="card-body">
-                                        <p class="card-text"><?php echo e($gambar->label); ?> (<?php echo e($gambar->tipe); ?>)</p>
+                                        <p class="card-text"><?php echo e($gambar->urutan); ?>. <?php echo e($gambar->label); ?></p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="deleted_images[]" value="<?php echo e($gambar->id); ?>">
+                                            <label class="form-check-label">Hapus</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                    <div class="row mt-3">
+                        <h5>Interior</h5>
+                        <?php $__currentLoopData = $mobil->gambars->where('tipe', 'interior')->sortBy('urutan'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gambar): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <img src="<?php echo e(asset('storage/' . $gambar->path)); ?>" class="card-img-top">
+                                    <div class="card-body">
+                                        <p class="card-text"><?php echo e($gambar->urutan); ?>. <?php echo e($gambar->label); ?></p>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="deleted_images[]" value="<?php echo e($gambar->id); ?>">
                                             <label class="form-check-label">Hapus</label>

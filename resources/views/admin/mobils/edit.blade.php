@@ -73,12 +73,30 @@
                 <div class="card-body">
                     <h5>Gambar Tersimpan</h5>
                     <div class="row">
-                        @foreach($mobil->gambars as $gambar)
+                        <h5>Eksterior</h5>
+                        @foreach($mobil->gambars->where('tipe', 'exterior')->sortBy('urutan') as $gambar)
                             <div class="col-md-3">
                                 <div class="card">
                                     <img src="{{ asset('storage/' . $gambar->path) }}" class="card-img-top">
                                     <div class="card-body">
-                                        <p class="card-text">{{ $gambar->label }} ({{ $gambar->tipe }})</p>
+                                        <p class="card-text">{{ $gambar->urutan }}. {{ $gambar->label }}</p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="deleted_images[]" value="{{ $gambar->id }}">
+                                            <label class="form-check-label">Hapus</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="row mt-3">
+                        <h5>Interior</h5>
+                        @foreach($mobil->gambars->where('tipe', 'interior')->sortBy('urutan') as $gambar)
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <img src="{{ asset('storage/' . $gambar->path) }}" class="card-img-top">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ $gambar->urutan }}. {{ $gambar->label }}</p>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="deleted_images[]" value="{{ $gambar->id }}">
                                             <label class="form-check-label">Hapus</label>

@@ -36,9 +36,11 @@
                         @foreach($gambars['exterior'] as $gambar)
                             <div class="col-md-4 mb-3">
                                 <div class="card">
-                                    <img src="{{ asset('storage/' . $gambar->path) }}" class="card-img-top" alt="{{ $gambar->label }}">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="{{ asset('storage/' . $gambar->path) }}" data-bs-caption="{{ $gambar->urutan }}. {{ $gambar->label }}">
+                                        <img src="{{ asset('storage/' . $gambar->path) }}" class="card-img-top" alt="{{ $gambar->label }}">
+                                    </a>
                                     <div class="card-body">
-                                        <p class="card-text">{{ $gambar->label }}</p>
+                                        <p class="card-text">{{ $gambar->urutan }}. {{ $gambar->label }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -54,9 +56,11 @@
                         @foreach($gambars['interior'] as $gambar)
                             <div class="col-md-4 mb-3">
                                 <div class="card">
-                                    <img src="{{ asset('storage/' . $gambar->path) }}" class="card-img-top" alt="{{ $gambar->label }}">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-src="{{ asset('storage/' . $gambar->path) }}" data-bs-caption="{{ $gambar->urutan }}. {{ $gambar->label }}">
+                                        <img src="{{ asset('storage/' . $gambar->path) }}" class="card-img-top" alt="{{ $gambar->label }}">
+                                    </a>
                                     <div class="card-body">
-                                        <p class="card-text">{{ $gambar->label }}</p>
+                                        <p class="card-text">{{ $gambar->urutan }}. {{ $gambar->label }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -69,4 +73,134 @@
         </div>
     </div>
 </div>
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center position-relative" style="height: 500px; overflow: hidden;"> <!-- Changed to fixed height and added overflow hidden -->
+                <div id="zoomContainer" style="width: 100%; height: 100%;">
+                    <img src="" class="img-fluid" id="modalImage" alt="Image Preview">
+                </div>
+                <div class="image-nav-overlay image-nav-prev" id="imagePrev">
+                    <span class="nav-icon" style="color: white !important;">&lt;</span>
+                </div>
+                <div class="image-nav-overlay image-nav-next" id="imageNext">
+                    <span class="nav-icon" style="color: white !important;">&gt;</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span id="imageCaption" class="me-auto"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<style>
+    .image-nav-overlay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 15%; /* Adjust as needed */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: white !important;
+        font-size: 2rem; /* Increased font size */
+        text-shadow: 0 0 10px rgba(0, 0, 0, 1); /* More prominent text shadow */
+        font-weight: bolder; /* Make icons even bolder */
+        /* opacity: 0; */ /* Removed opacity */
+        /* transition: opacity 0.2s ease-in-out; */ /* Removed transition */
+    }
+    .image-nav-prev {
+        left: 0;
+    }
+    .image-nav-next {
+        right: 0;
+    }
+    .nav-icon {
+        pointer-events: none; /* Prevent icon from interfering with click */
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var imageModal = document.getElementById('imageModal');
+        var modalImage = imageModal.querySelector('#modalImage');
+        var modalCaption = imageModal.querySelector('#imageCaption');
+        var imagePrev = imageModal.querySelector('#imagePrev');
+        var imageNext = imageModal.querySelector('#imageNext');
+        var zoomContainer = imageModal.querySelector('#zoomContainer');
+
+        var allImages = [];
+        var currentIndex = 0;
+        var currentPinchZoom = null; // To store the PinchZoom instance
+
+        // Collect all image data
+        document.querySelectorAll('[data-bs-toggle="modal"][data-bs-target="#imageModal"]').forEach(function(imgLink) {
+            allImages.push({
+                src: imgLink.getAttribute('data-bs-src'),
+                caption: imgLink.getAttribute('data-bs-caption')
+            });
+        });
+
+        imageModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var imageUrl = button.getAttribute('data-bs-src');
+            var imageCaption = button.getAttribute('data-bs-caption');
+
+            // Find the index of the clicked image
+            currentIndex = allImages.findIndex(function(image) {
+                return image.src === imageUrl;
+            });
+
+            updateModalContent();
+
+            // Initialize PinchZoom.js after image is loaded
+            modalImage.onload = function() {
+                if (currentPinchZoom) {
+                    currentPinchZoom.destroy(); // Destroy previous instance if exists
+                }
+                currentPinchZoom = new PinchZoom(zoomContainer, {
+                    // Options for PinchZoom.js (optional)
+                    // For example:
+                    // minZoom: 0.5,
+                    // maxZoom: 4,
+                    // tapZoomFactor: 2,
+                });
+            };
+        });
+
+        imageModal.addEventListener('hidden.bs.modal', function () {
+            if (currentPinchZoom) {
+                currentPinchZoom.destroy(); // Destroy instance when modal is hidden
+                currentPinchZoom = null;
+            }
+        });
+
+        imagePrev.addEventListener('click', function() {
+            currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+            updateModalContent();
+        });
+
+        imageNext.addEventListener('click', function() {
+            currentIndex = (currentIndex + 1) % allImages.length;
+            updateModalContent();
+        });
+
+        function updateModalContent() {
+            if (allImages.length > 0) {
+                modalImage.src = allImages[currentIndex].src;
+                modalCaption.textContent = ''; // Clear the caption in the footer
+                imageModal.querySelector('#imageModalLabel').textContent = allImages[currentIndex].caption;
+            }
+        }
+    });
+</script>
+@endpush
+
 @endsection

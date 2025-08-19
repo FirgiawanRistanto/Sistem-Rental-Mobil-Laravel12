@@ -306,3 +306,43 @@
         height: 40vh; /* Adjust for smaller screens */
     }
 }
+
+/* Untuk menstabilkan layout tabel */
+.table-fixed-layout {
+  table-layout: fixed;
+  width: 100%;
+}
+
+
+/* Custom font size for penyewaan table */
+#penyewaanTable_wrapper {
+    font-size: 0.8rem;
+}
+
+/* Custom button size for penyewaan table */
+/* Custom button size for penyewaan table */
+#penyewaanTable .btn {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+    border-radius: 0.2rem;
+}
+
+/* Center text in penyewaan table */
+#penyewaanTable th,
+#penyewaanTable td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.4em 0.8em; /* Atur padding agar lebih seragam */
+        font-size: 0em; /* Perkecil font */
+        line-height: 1; /* Atur tinggi baris */
+        min-width: 2.5em; /* Atur lebar minimum */
+        text-align: center;
+    }
+
+
+
+
+

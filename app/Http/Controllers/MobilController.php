@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mobil;
+
 use Illuminate\Http\Request;
 
 class MobilController extends Controller

@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
     .card .table th,
     .card .table td {
@@ -18,17 +16,18 @@
         background-color: #fff; /* Pastikan input tidak terlihat disabled */
     }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header">Daftar Pengembalian Mobil</div>
     <div class="card-body">
-        @if(session('success'))
+        <?php if(session('success')): ?>
             <div class="alert alert-success">
-                {{ session('success') }}
+                <?php echo e(session('success')); ?>
+
             </div>
-        @endif
+        <?php endif; ?>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -43,41 +42,41 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($penyewaans as $penyewaan)
-                    <tr data-tanggal-kembali-seharusnya="{{ $penyewaan->tanggal_kembali }}" data-denda-per-hari="{{ $penyewaan->mobil->denda_per_hari }}">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $penyewaan->mobil->merk }} ({{ $penyewaan->mobil->nopol }})</td>
-                        <td>{{ $penyewaan->pelanggan->nama }}</td>
-                        <td>{{ $penyewaan->tanggal_sewa->translatedFormat('d F Y') }}</td>
-                        <td>{{ $penyewaan->tanggal_kembali->translatedFormat('d F Y') }}</td>
+                <?php $__empty_1 = true; $__currentLoopData = $penyewaans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $penyewaan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <tr data-tanggal-kembali-seharusnya="<?php echo e($penyewaan->tanggal_kembali); ?>" data-denda-per-hari="<?php echo e($penyewaan->mobil->denda_per_hari); ?>">
+                        <td><?php echo e($loop->iteration); ?></td>
+                        <td><?php echo e($penyewaan->mobil->merk); ?> (<?php echo e($penyewaan->mobil->nopol); ?>)</td>
+                        <td><?php echo e($penyewaan->pelanggan->nama); ?></td>
+                        <td><?php echo e($penyewaan->tanggal_sewa->translatedFormat('d F Y')); ?></td>
+                        <td><?php echo e($penyewaan->tanggal_kembali->translatedFormat('d F Y')); ?></td>
                         <td>
                             <div class="input-group flatpickr" data-wrap="true">
                                 <input type="text" class="form-control" placeholder="Pilih tanggal..." readonly="readonly" data-input>
                                 <span class="input-group-text" data-toggle><i class="fa fa-calendar"></i></span>
                             </div>
                         </td>
-                        <td><span id="denda-{{ $penyewaan->id }}">Rp. {{ number_format($penyewaan->denda ?? 0, 0, ',', '.') }}</span></td>
+                        <td><span id="denda-<?php echo e($penyewaan->id); ?>">Rp. <?php echo e(number_format($penyewaan->denda ?? 0, 0, ',', '.')); ?></span></td>
                         <td>
-                            <form action="{{ route('admin.pengembalian.store', $penyewaan) }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="tanggal_kembali_aktual" class="tanggal-kembali-aktual" data-penyewaan-id="{{ $penyewaan->id }}" required>
-                                <input type="hidden" name="denda" class="denda-hidden" value="{{ $penyewaan->denda ?? 0 }}">
+                            <form action="<?php echo e(route('admin.pengembalian.store', $penyewaan)); ?>" method="POST">
+                                <?php echo csrf_field(); ?>
+                                <input type="hidden" name="tanggal_kembali_aktual" class="tanggal-kembali-aktual" data-penyewaan-id="<?php echo e($penyewaan->id); ?>" required>
+                                <input type="hidden" name="denda" class="denda-hidden" value="<?php echo e($penyewaan->denda ?? 0); ?>">
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                             </form>
                         </td>
                     </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <tr>
                         <td colspan="8" class="text-center">Tidak ada mobil yang sedang disewa.</td>
                     </tr>
-                @endforelse
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         console.log("Flatpickr script is running!"); // Added for debugging
@@ -140,4 +139,6 @@
         });
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Kuliah\xampp8\htdocs\rentalMobil\resources\views/admin/pengembalian/index.blade.php ENDPATH**/ ?>
