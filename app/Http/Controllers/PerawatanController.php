@@ -65,7 +65,8 @@ class PerawatanController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $perawatan = Perawatan::with('mobil')->findOrFail($id);
+        return view('admin.perawatans.show', compact('perawatan'));
     }
 
     /**
@@ -140,6 +141,9 @@ class PerawatanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $perawatan = Perawatan::findOrFail($id);
+        $perawatan->delete();
+
+        return redirect()->route('admin.perawatans.index')->with('success', 'Data perawatan berhasil dihapus.');
     }
 }

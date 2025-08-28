@@ -1,3 +1,19 @@
+<?php $__env->startPush('styles'); ?>
+<style>
+    .perawatan-table th,
+    .perawatan-table td {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 0.8rem; /* Adjusted font size */
+    }
+    .perawatan-table .aksi-kolom .btn {
+        padding: 0.15rem 0.4rem;
+        font-size: 0.75rem;
+        border-radius: 0.2rem;
+    }
+</style>
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header">Manajemen Perawatan Mobil</div>
@@ -7,7 +23,7 @@
             <div class="alert alert-success"><?php echo e(session('success')); ?></div>
         <?php endif; ?>
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered perawatan-table">
                 <thead>
                     <tr>
                         <th>Mobil</th>
@@ -25,7 +41,7 @@
                         <td><?php echo e($perawatan->mobil->merk); ?> <?php echo e($perawatan->mobil->tipe); ?> (<?php echo e($perawatan->mobil->nopol); ?>)</td>
                         <td><?php echo e($perawatan->tanggal_mulai); ?></td>
                         <td><?php echo e($perawatan->tanggal_selesai ?? '-'); ?></td>
-                        <td><?php echo e($perawatan->deskripsi); ?></td>
+                        <td><?php echo e(\Illuminate\Support\Str::limit($perawatan->deskripsi, 30, '...')); ?></td>
                         <td>Rp <?php echo e(number_format($perawatan->biaya, 0, ',', '.')); ?></td>
                         <td>
                             <?php if($perawatan->status == 'selesai'): ?>
@@ -34,11 +50,17 @@
                                 <span class="badge bg-warning">Dalam Pengerjaan</span>
                             <?php endif; ?>
                         </td>
-                        <td>
+                        <td class="aksi-kolom">
+                            <a href="<?php echo e(route('admin.perawatans.show', $perawatan->id)); ?>" class="btn btn-success btn-sm">Lihat</a>
                             <a href="<?php echo e(route('admin.perawatans.edit', $perawatan->id)); ?>" class="btn btn-info btn-sm">Edit</a>
                             <?php if($perawatan->status == 'dalam pengerjaan'): ?>
                                 <a href="<?php echo e(route('admin.perawatans.completeForm', $perawatan->id)); ?>" class="btn btn-warning btn-sm">Selesaikan</a>
                             <?php endif; ?>
+                            <form action="<?php echo e(route('admin.perawatans.destroy', $perawatan->id)); ?>" method="POST" class="d-inline">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</button>
+                            </form>
                         </td>
                     </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -24,8 +24,17 @@ class PelangganController extends Controller
             ->addColumn('action', function ($pelanggan) {
                 $showUrl = route('admin.pelanggans.show', $pelanggan->id);
                 $editUrl = route('admin.pelanggans.edit', $pelanggan->id);
+                $deleteUrl = route('admin.pelanggans.destroy', $pelanggan->id);
+
+                $csrf = csrf_field();
+                $method = method_field('DELETE');
+
                 return '<a href="' . $showUrl . '" class="btn btn-info btn-sm">Lihat</a> ' . 
-                       '<a href="' . $editUrl . '" class="btn btn-warning btn-sm">Edit</a>';
+                       '<a href="' . $editUrl . '" class="btn btn-warning btn-sm">Edit</a> ' . 
+                       '<form action="' . $deleteUrl . '" method="POST" class="d-inline">' . 
+                       $csrf . $method . 
+                       '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin menghapus data ini?\')">Delete</button>' . 
+                       '</form>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -57,6 +66,13 @@ class PelangganController extends Controller
         $pelanggan->update($request->all());
 
         return redirect()->route('admin.pelanggans.index')->with('success', 'Data pelanggan berhasil diperbarui.');
+    }
+
+    public function destroy(Pelanggan $pelanggan)
+    {
+        $pelanggan->delete();
+
+        return redirect()->route('admin.pelanggans.index')->with('success', 'Data pelanggan berhasil dihapus.');
     }
 
     public function storeAjax(Request $request)

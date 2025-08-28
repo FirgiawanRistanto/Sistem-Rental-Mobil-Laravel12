@@ -10,7 +10,7 @@
                 <label for="mobil_id" class="form-label">Mobil:</label>
                 <select class="form-select" id="mobil_id" name="mobil_id" required>
                     @foreach($mobils as $mobil)
-                        <option value="{{ $mobil->id }}" data-harga="{{ $mobil->harga_sewa }}">{{ $mobil->merk }} ({{ $mobil->nopol }})</option>
+                        <option value="{{ $mobil->id }}" data-harga="{{ $mobil->harga_sewa }}">{{ $mobil->merk }} {{ $mobil->tipe }} ({{ $mobil->nopol }})</option>
                     @endforeach
                 </select>
                 @error('mobil_id')

@@ -8,7 +8,7 @@
                 <label for="mobil_id" class="form-label">Mobil:</label>
                 <select class="form-select" id="mobil_id" name="mobil_id" required>
                     <?php $__currentLoopData = $mobils; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mobil): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($mobil->id); ?>" data-harga="<?php echo e($mobil->harga_sewa); ?>"><?php echo e($mobil->merk); ?> (<?php echo e($mobil->nopol); ?>)</option>
+                        <option value="<?php echo e($mobil->id); ?>" data-harga="<?php echo e($mobil->harga_sewa); ?>"><?php echo e($mobil->merk); ?> <?php echo e($mobil->tipe); ?> (<?php echo e($mobil->nopol); ?>)</option>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
                 <?php $__errorArgs = ['mobil_id'];

@@ -26,8 +26,23 @@ class PenyewaanController extends Controller
             ->addColumn('action', function ($penyewaan) {
                 $showUrl = route('admin.penyewaans.show', $penyewaan->id);
                 $editUrl = route('admin.penyewaans.edit', $penyewaan->id);
-                return '<a href="' . $showUrl . '" class="btn btn-info btn-sm">Lihat</a> ' . 
-                       '<a href="' . $editUrl . '" class="btn btn-warning btn-sm">Edit</a>';
+                $deleteUrl = route('admin.penyewaans.destroy', $penyewaan->id);
+
+                $csrf = csrf_field();
+                $method = method_field('DELETE');
+
+                $buttons = '<a href="' . $showUrl . '" class="btn btn-info btn-sm">Lihat</a> ' . 
+                           '<a href="' . $editUrl . '" class="btn btn-warning btn-sm">Edit</a> ';
+
+                // Hanya tampilkan tombol delete jika status bukan 'Disewa'
+                if ($penyewaan->status !== 'Disewa') {
+                    $buttons .= '<form action="' . $deleteUrl . '" method="POST" class="d-inline">' . 
+                                $csrf . $method . 
+                                '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin menghapus data ini?\')">Delete</button>' . 
+                                '</form>';
+                }
+
+                return $buttons;
             })
             ->editColumn('id', function ($penyewaan) {
                 return 'BOOK-' . str_pad($penyewaan->id, 5, '0', STR_PAD_LEFT);
@@ -125,6 +140,21 @@ class PenyewaanController extends Controller
         $penyewaan->update($request->all());
 
         return redirect()->route('admin.penyewaans.index')->with('success', 'Penyewaan updated successfully!');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Penyewaan $penyewaan)
+    {
+        // Optional: Add any logic here before deleting, for example, check if the rental is active.
+        if ($penyewaan->status === 'Disewa') {
+            return redirect()->route('admin.penyewaans.index')->with('error', 'Penyewaan yang masih aktif tidak dapat dihapus.');
+        }
+
+        $penyewaan->delete();
+
+        return redirect()->route('admin.penyewaans.index')->with('success', 'Data penyewaan berhasil dihapus.');
     }
 
     /**
