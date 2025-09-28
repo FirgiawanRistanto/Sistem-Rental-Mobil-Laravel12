@@ -76,11 +76,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                     </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" name="remember" id="remember"
-                            <?php echo e(old('remember') ? 'checked' : ''); ?>>
-                        <label class="form-check-label" for="remember"><?php echo e(__('Remember Me')); ?></label>
-                    </div>
+
                     <div class="text-center mb-3">
                         <button type="submit" class="btn btn-primary px-5">
                             <?php echo e(__('Login')); ?>

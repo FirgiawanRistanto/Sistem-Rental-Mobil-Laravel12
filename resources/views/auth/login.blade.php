@@ -46,11 +46,7 @@
                         </div>
                         @enderror
                     </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" name="remember" id="remember"
-                            {{ old('remember') ? 'checked' : '' }}>
-                        <label class="form-check-label" for="remember">{{ __('Remember Me') }}</label>
-                    </div>
+
                     <div class="text-center mb-3">
                         <button type="submit" class="btn btn-primary px-5">
                             {{ __('Login') }}
