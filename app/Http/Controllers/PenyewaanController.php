@@ -100,7 +100,7 @@ class PenyewaanController extends Controller
             $mobil->save();
         }
 
-        return redirect()->route('admin.penyewaans.index')->with('success', 'Penyewaan added successfully!');
+        return redirect()->route('admin.penyewaans.index')->with('success', 'Data penyewaan berhasil ditambahkan.');
     }
 
     /**
@@ -139,7 +139,7 @@ class PenyewaanController extends Controller
 
         $penyewaan->update($request->all());
 
-        return redirect()->route('admin.penyewaans.index')->with('success', 'Penyewaan updated successfully!');
+        return redirect()->route('admin.penyewaans.index')->with('success', 'Penyewaan berhasil diperbarui!');
     }
 
     /**

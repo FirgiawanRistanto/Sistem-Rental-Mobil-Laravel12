@@ -2,8 +2,12 @@
 <div class="card">
     <div class="card-header">Manajemen Pelanggan</div>
     <div class="card-body">
+        <a href="<?php echo e(route('admin.pelanggans.create')); ?>" class="btn btn-primary mb-3">Tambah Pelanggan</a>
         <?php if(session('success')): ?>
             <div class="alert alert-success"><?php echo e(session('success')); ?></div>
+        <?php endif; ?>
+        <?php if(session('error')): ?>
+            <div class="alert alert-danger"><?php echo e(session('error')); ?></div>
         <?php endif; ?>
         <table class="table table-bordered" id="pelangganTable">
             <thead>
@@ -26,7 +30,7 @@
 <?php $__env->startPush('scripts'); ?>
 <script>
     $(document).ready(function() {
-        $('#pelangganTable').DataTable({
+        var table = $('#pelangganTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: '<?php echo e(route("admin.pelanggans.data")); ?>',
@@ -41,6 +45,25 @@
                 url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
                 processing: 'Memuat data...'
             }
+        });
+
+        $('#pelangganTable').on('click', '.delete-form button[type="submit"]', function(e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda tidak akan dapat mengembalikan ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
         });
     });
 </script>

@@ -35,7 +35,9 @@ class MobilController extends Controller
             'exterior_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'interior_urutan.*' => 'nullable|integer|min:0',
             'exterior_urutan.*' => 'nullable|integer|min:0',
-        ]));
+        ]), [
+            'nopol.unique' => 'nopol sudah ada',
+        ]);
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -74,7 +76,7 @@ class MobilController extends Controller
             }
         }
 
-        return redirect()->route('admin.mobils.index')->with('success', 'Mobil added successfully!');
+        return redirect()->route('admin.mobils.index')->with('success', 'Data mobil berhasil ditambahkan!');
     }
 
     /**
@@ -151,7 +153,7 @@ class MobilController extends Controller
             }
         }
 
-        return redirect()->route('admin.mobils.index')->with('success', 'Mobil updated successfully!');
+        return redirect()->route('admin.mobils.index')->with('success', 'Data mobil berhasil diperbarui!');
     }
 
     /**
@@ -160,6 +162,6 @@ class MobilController extends Controller
     public function destroy(Mobil $mobil)
     {
         $mobil->delete();
-        return redirect()->route('admin.mobils.index')->with('success', 'Mobil deleted successfully!');
+        return redirect()->route('admin.mobils.index')->with('success', 'Data mobil berhasil dihapus!');
     }
 }

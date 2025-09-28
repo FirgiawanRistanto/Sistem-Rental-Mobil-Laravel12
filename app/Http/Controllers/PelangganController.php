@@ -16,6 +16,36 @@ class PelangganController extends Controller
         return view('admin.pelanggans.index');
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('admin.pelanggans.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'no_ktp' => 'required|string|max:16|unique:pelanggans,no_ktp',
+            'no_hp' => 'required|string|max:13',
+            'alamat' => 'required|string',
+        ]);
+
+        Pelanggan::create($request->all());
+
+        return redirect()->route('admin.pelanggans.index')->with('success', 'Pelanggan berhasil ditambahkan.');
+    }
+
     public function getPelanggansData()
     {
         $pelanggans = Pelanggan::select('pelanggans.*');
@@ -31,9 +61,9 @@ class PelangganController extends Controller
 
                 return '<a href="' . $showUrl . '" class="btn btn-info btn-sm">Lihat</a> ' . 
                        '<a href="' . $editUrl . '" class="btn btn-warning btn-sm">Edit</a> ' . 
-                       '<form action="' . $deleteUrl . '" method="POST" class="d-inline">' . 
+                       '<form action="' . $deleteUrl . '" method="POST" class="d-inline delete-form">' . 
                        $csrf . $method . 
-                       '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin menghapus data ini?\')">Delete</button>' . 
+                       '<button type="submit" class="btn btn-danger btn-sm">Delete</button>' . 
                        '</form>';
             })
             ->rawColumns(['action'])
@@ -70,6 +100,10 @@ class PelangganController extends Controller
 
     public function destroy(Pelanggan $pelanggan)
     {
+        if ($pelanggan->penyewaans()->exists()) {
+            return redirect()->route('admin.pelanggans.index')->with('error', 'Gagal menghapus! Pelanggan ini memiliki penyewaan aktif.');
+        }
+
         $pelanggan->delete();
 
         return redirect()->route('admin.pelanggans.index')->with('success', 'Data pelanggan berhasil dihapus.');

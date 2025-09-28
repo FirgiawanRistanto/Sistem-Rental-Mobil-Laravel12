@@ -226,6 +226,20 @@ unset($__errorArgs, $__bag); ?>
             locale: "id",
             disableMobile: true,
         });
+
+        const requiredFields = document.querySelectorAll('[required]');
+
+        requiredFields.forEach(function(field) {
+            field.addEventListener('invalid', function(event) {
+                if (event.target.validity.valueMissing) {
+                    event.target.setCustomValidity('kolom ini tidak boleh kosong');
+                }
+            });
+
+            field.addEventListener('input', function(event) {
+                event.target.setCustomValidity('');
+            });
+        });
     });
 </script>
 <?php $__env->stopPush(); ?>

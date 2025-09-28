@@ -137,6 +137,22 @@
                 }
             });
         });
+
+        // Add validation for the form submission
+        const forms = document.querySelectorAll('form[action*="pengembalian"]');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                const hiddenInput = form.querySelector('.tanggal-kembali-aktual');
+                if (!hiddenInput.value) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tanggal kembali aktual tidak boleh kosong!',
+                    });
+                }
+            });
+        });
     });
 </script>
 <?php $__env->stopPush(); ?>

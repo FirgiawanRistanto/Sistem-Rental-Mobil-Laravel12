@@ -11,7 +11,7 @@
     <div class="col-md-6 col-lg-4 position-relative" style="z-index: 2;">
         <div class="glass-card">
             <div class="card-header text-center">
-                <h4><?php echo e(__('Welcome Back')); ?></h4>
+                <h4>Login</h4>
             </div>
             <div class="card-body">
                 <?php if(session('status')): ?>
@@ -23,7 +23,7 @@
                 <form method="POST" action="<?php echo e(route('login')); ?>">
                     <?php echo csrf_field(); ?>
                     <div class="mb-3">
-                        <label for="email" class="form-label"><?php echo e(__('Email Address')); ?></label>
+                        <label for="email" class="form-label">Alamat Email</label>
                         <input id="email" type="email"
                             class="form-control <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -33,7 +33,7 @@ $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>"
-                            name="email" value="<?php echo e(old('email')); ?>" required autocomplete="email" autofocus
+                            name="email" value="<?php echo e(old('email')); ?>" autofocus
                             placeholder="Enter your email">
                         <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -41,7 +41,7 @@ if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
                         <div class="invalid-feedback">
-                            <?php echo e($message); ?>
+                            <?php echo e($message == 'The email field is required.' ? 'Alamat email tidak boleh kosong.' : $message); ?>
 
                         </div>
                         <?php unset($message);
@@ -60,7 +60,7 @@ $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>"
-                            name="password" required autocomplete="current-password"
+                            name="password" 
                             placeholder="Enter your password">
                         <?php $__errorArgs = ['password'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -68,7 +68,7 @@ if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
                         <div class="invalid-feedback">
-                            <?php echo e($message); ?>
+                            <?php echo e($message == 'The password field is required.' ? 'Password tidak boleh kosong.' : $message); ?>
 
                         </div>
                         <?php unset($message);

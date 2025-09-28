@@ -10,7 +10,7 @@
                 <label for="mobil_id" class="form-label">Mobil:</label>
                 <select class="form-select" id="mobil_id" name="mobil_id" required>
                     @foreach($mobils as $mobil)
-                        <option value="{{ $mobil->id }}" data-harga="{{ $mobil->harga_sewa }}">{{ $mobil->merk }} {{ $mobil->tipe }} ({{ $mobil->nopol }})</option>
+                        <option value="{{ $mobil->id }}" {{ old('mobil_id') == $mobil->id ? 'selected' : '' }} data-harga="{{ $mobil->harga_sewa }}">{{ $mobil->merk }} {{ $mobil->tipe }} ({{ $mobil->nopol }})</option>
                     @endforeach
                 </select>
                 @error('mobil_id')
@@ -23,7 +23,7 @@
                     <select class="form-select" id="pelanggan_id" name="pelanggan_id" required>
                         <option value="" disabled selected>Pilih Pelanggan</option>
                         @foreach($pelanggans as $pelanggan)
-                            <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama }} ({{ $pelanggan->no_ktp }})</option>
+                            <option value="{{ $pelanggan->id }}" {{ old('pelanggan_id') == $pelanggan->id ? 'selected' : '' }}>{{ $pelanggan->nama }} ({{ $pelanggan->no_ktp }})</option>
                         @endforeach
                     </select>
                     <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#addPelangganModal">+</button>
@@ -34,21 +34,21 @@
             </div>
             <div class="mb-3">
                 <label for="tanggal_sewa" class="form-label">Tanggal Sewa:</label>
-                <input type="text" class="form-control flatpickr" id="tanggal_sewa" name="tanggal_sewa" required>
+                <input type="text" class="form-control flatpickr" id="tanggal_sewa" name="tanggal_sewa" required value="{{ old('tanggal_sewa') }}">
                 @error('tanggal_sewa')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="tanggal_kembali" class="form-label">Tanggal Kembali:</label>
-                <input type="text" class="form-control flatpickr" id="tanggal_kembali" name="tanggal_kembali" required>
+                <input type="text" class="form-control flatpickr" id="tanggal_kembali" name="tanggal_kembali" required value="{{ old('tanggal_kembali') }}">
                 @error('tanggal_kembali')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="total_biaya" class="form-label">Total Biaya:</label>
-                <input type="text" class="form-control" id="total_biaya" name="total_biaya" required readonly style="background-color: #e9ecef;">
+                <input type="text" class="form-control" id="total_biaya" name="total_biaya" required readonly style="background-color: #e9ecef;" value="{{ old('total_biaya') }}">
                 @error('total_biaya')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -56,8 +56,8 @@
             <div class="mb-3">
                 <label for="status" class="form-label">Status:</label>
                 <select class="form-select" id="status" name="status">
-                    <option value="Disewa">Disewa</option>
-                    <option value="Selesai">Selesai</option>
+                    <option value="Disewa" {{ old('status') == 'Disewa' ? 'selected' : '' }}>Disewa</option>
+                    <option value="Selesai" {{ old('status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                 </select>
                 @error('status')
                     <div class="text-danger">{{ $message }}</div>
@@ -131,6 +131,20 @@
             disableMobile: true,
         });
 
+        // --- Custom validation for all required fields ---
+        const requiredFields = document.querySelectorAll('[required]');
+        requiredFields.forEach(function(field) {
+            field.addEventListener('invalid', function(event) {
+                if (event.target.validity.valueMissing) {
+                    event.target.setCustomValidity('kolom ini tidak boleh kosong');
+                }
+            });
+
+            field.addEventListener('input', function(event) {
+                event.target.setCustomValidity('');
+            });
+        });
+
         const mobilSelect = document.getElementById('mobil_id');
         const tanggalSewaInput = document.getElementById('tanggal_sewa');
         const tanggalKembaliInput = document.getElementById('tanggal_kembali');
@@ -165,6 +179,12 @@
         const addPelangganForm = document.getElementById('addPelangganForm');
 
         savePelangganBtn.addEventListener('click', function() {
+            // Trigger browser validation
+            if (!addPelangganForm.checkValidity()) {
+                addPelangganForm.reportValidity();
+                return;
+            }
+
             const formData = new FormData(addPelangganForm);
             fetch('{{ route("admin.pelanggans.storeAjax") }}', {
                 method: 'POST',

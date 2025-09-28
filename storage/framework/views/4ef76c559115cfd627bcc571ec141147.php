@@ -8,7 +8,7 @@
                 <label for="mobil_id" class="form-label">Mobil:</label>
                 <select class="form-select" id="mobil_id" name="mobil_id" required>
                     <?php $__currentLoopData = $mobils; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mobil): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($mobil->id); ?>" data-harga="<?php echo e($mobil->harga_sewa); ?>"><?php echo e($mobil->merk); ?> <?php echo e($mobil->tipe); ?> (<?php echo e($mobil->nopol); ?>)</option>
+                        <option value="<?php echo e($mobil->id); ?>" <?php echo e(old('mobil_id') == $mobil->id ? 'selected' : ''); ?> data-harga="<?php echo e($mobil->harga_sewa); ?>"><?php echo e($mobil->merk); ?> <?php echo e($mobil->tipe); ?> (<?php echo e($mobil->nopol); ?>)</option>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
                 <?php $__errorArgs = ['mobil_id'];
@@ -28,7 +28,7 @@ unset($__errorArgs, $__bag); ?>
                     <select class="form-select" id="pelanggan_id" name="pelanggan_id" required>
                         <option value="" disabled selected>Pilih Pelanggan</option>
                         <?php $__currentLoopData = $pelanggans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pelanggan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($pelanggan->id); ?>"><?php echo e($pelanggan->nama); ?> (<?php echo e($pelanggan->no_ktp); ?>)</option>
+                            <option value="<?php echo e($pelanggan->id); ?>" <?php echo e(old('pelanggan_id') == $pelanggan->id ? 'selected' : ''); ?>><?php echo e($pelanggan->nama); ?> (<?php echo e($pelanggan->no_ktp); ?>)</option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                     <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#addPelangganModal">+</button>
@@ -46,7 +46,7 @@ unset($__errorArgs, $__bag); ?>
             </div>
             <div class="mb-3">
                 <label for="tanggal_sewa" class="form-label">Tanggal Sewa:</label>
-                <input type="text" class="form-control flatpickr" id="tanggal_sewa" name="tanggal_sewa" required>
+                <input type="text" class="form-control flatpickr" id="tanggal_sewa" name="tanggal_sewa" required value="<?php echo e(old('tanggal_sewa')); ?>">
                 <?php $__errorArgs = ['tanggal_sewa'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -60,7 +60,7 @@ unset($__errorArgs, $__bag); ?>
             </div>
             <div class="mb-3">
                 <label for="tanggal_kembali" class="form-label">Tanggal Kembali:</label>
-                <input type="text" class="form-control flatpickr" id="tanggal_kembali" name="tanggal_kembali" required>
+                <input type="text" class="form-control flatpickr" id="tanggal_kembali" name="tanggal_kembali" required value="<?php echo e(old('tanggal_kembali')); ?>">
                 <?php $__errorArgs = ['tanggal_kembali'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -74,7 +74,7 @@ unset($__errorArgs, $__bag); ?>
             </div>
             <div class="mb-3">
                 <label for="total_biaya" class="form-label">Total Biaya:</label>
-                <input type="text" class="form-control" id="total_biaya" name="total_biaya" required readonly style="background-color: #e9ecef;">
+                <input type="text" class="form-control" id="total_biaya" name="total_biaya" required readonly style="background-color: #e9ecef;" value="<?php echo e(old('total_biaya')); ?>">
                 <?php $__errorArgs = ['total_biaya'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -89,8 +89,8 @@ unset($__errorArgs, $__bag); ?>
             <div class="mb-3">
                 <label for="status" class="form-label">Status:</label>
                 <select class="form-select" id="status" name="status">
-                    <option value="Disewa">Disewa</option>
-                    <option value="Selesai">Selesai</option>
+                    <option value="Disewa" <?php echo e(old('status') == 'Disewa' ? 'selected' : ''); ?>>Disewa</option>
+                    <option value="Selesai" <?php echo e(old('status') == 'Selesai' ? 'selected' : ''); ?>>Selesai</option>
                 </select>
                 <?php $__errorArgs = ['status'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -171,6 +171,20 @@ unset($__errorArgs, $__bag); ?>
             disableMobile: true,
         });
 
+        // --- Custom validation for all required fields ---
+        const requiredFields = document.querySelectorAll('[required]');
+        requiredFields.forEach(function(field) {
+            field.addEventListener('invalid', function(event) {
+                if (event.target.validity.valueMissing) {
+                    event.target.setCustomValidity('kolom ini tidak boleh kosong');
+                }
+            });
+
+            field.addEventListener('input', function(event) {
+                event.target.setCustomValidity('');
+            });
+        });
+
         const mobilSelect = document.getElementById('mobil_id');
         const tanggalSewaInput = document.getElementById('tanggal_sewa');
         const tanggalKembaliInput = document.getElementById('tanggal_kembali');
@@ -205,6 +219,12 @@ unset($__errorArgs, $__bag); ?>
         const addPelangganForm = document.getElementById('addPelangganForm');
 
         savePelangganBtn.addEventListener('click', function() {
+            // Trigger browser validation
+            if (!addPelangganForm.checkValidity()) {
+                addPelangganForm.reportValidity();
+                return;
+            }
+
             const formData = new FormData(addPelangganForm);
             fetch('<?php echo e(route("admin.pelanggans.storeAjax")); ?>', {
                 method: 'POST',

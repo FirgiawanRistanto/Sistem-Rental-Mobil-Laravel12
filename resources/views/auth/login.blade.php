@@ -12,7 +12,7 @@
     <div class="col-md-6 col-lg-4 position-relative" style="z-index: 2;">
         <div class="glass-card">
             <div class="card-header text-center">
-                <h4>{{ __('Welcome Back') }}</h4>
+                <h4>Login</h4>
             </div>
             <div class="card-body">
                 @if (session('status'))
@@ -23,14 +23,14 @@
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="mb-3">
-                        <label for="email" class="form-label">{{ __('Email Address') }}</label>
+                        <label for="email" class="form-label">Alamat Email</label>
                         <input id="email" type="email"
                             class="form-control @error('email') is-invalid @enderror"
-                            name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
+                            name="email" value="{{ old('email') }}" autofocus
                             placeholder="Enter your email">
                         @error('email')
                         <div class="invalid-feedback">
-                            {{ $message }}
+                            {{ $message == 'The email field is required.' ? 'Alamat email tidak boleh kosong.' : $message }}
                         </div>
                         @enderror
                     </div>
@@ -38,11 +38,11 @@
                         <label for="password" class="form-label">{{ __('Password') }}</label>
                         <input id="password" type="password"
                             class="form-control @error('password') is-invalid @enderror"
-                            name="password" required autocomplete="current-password"
+                            name="password" 
                             placeholder="Enter your password">
                         @error('password')
                         <div class="invalid-feedback">
-                            {{ $message }}
+                            {{ $message == 'The password field is required.' ? 'Password tidak boleh kosong.' : $message }}
                         </div>
                         @enderror
                     </div>

@@ -44,7 +44,7 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
 
     // Pelanggan Routes
     Route::post('pelanggans/store-ajax', [PelangganController::class, 'storeAjax'])->name('pelanggans.storeAjax');
-    Route::resource('pelanggans', PelangganController::class)->except(['create', 'store']);
+    Route::resource('pelanggans', PelangganController::class);
     Route::get('pelanggans-data', [PelangganController::class, 'getPelanggansData'])->name('pelanggans.data');
 
     // Penyewaan Routes
